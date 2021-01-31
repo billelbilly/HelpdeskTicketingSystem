@@ -219,7 +219,7 @@ function getTicketsTabulator() {
 			headerSort : false,
 			cellClick : function(e, cell) {
 				///********* Here Add All The Ticket Information That you want to be added **********///
-				console.log("Ticket Status: "+cell.getRow().getData(0)[3]);
+				
 				var ticket_info;
 				var creationDate=getFormattedDate(cell.getRow().getData(0)[5].toString());
 			
@@ -252,7 +252,7 @@ function getTicketsTabulator() {
 				}
 				
 				$("#putDetail").text(cell.getRow().getData(0)[2].toString());
-				console.log("Created By: "+cell.getRow().getData(0)[8].toString());
+				
 				///*********************************************************************************///
 
 			}

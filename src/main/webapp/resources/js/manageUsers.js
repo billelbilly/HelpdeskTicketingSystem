@@ -186,7 +186,7 @@ function getUsersTabulator() {
 					                  }
 						
 						if (cell.getRow().getData(0)[7]!=null) {
-							console.log("Date Expiration: "+cell.getRow().getData(0)[7])
+							
 							dateExpiration = cell.getRow().getData(0)[7];
 							dateExpiration=getFormattedDate(dateExpiration);
 						}

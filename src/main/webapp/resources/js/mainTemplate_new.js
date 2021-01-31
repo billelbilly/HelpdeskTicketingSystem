@@ -241,7 +241,7 @@
 					headerSort : false,
 					cellClick : function(e, cell) {
 						///********* Here Add All The Ticket Information That you want to be added **********///
-						console.log("Ticket : "+cell.getRow().getData(0));
+						
 						var ticket_info;
 						var creationDate=getFormattedDate(cell.getRow().getData(0)[5].toString());
 					
@@ -450,9 +450,9 @@
  	 	 						var ticket_id = cell.getRow().getData(0)[0].toString();
  	 	 						var date=getFormattedDate(cell.getRow().getData(0)[5].toString(),"ticket");
  	 	 						var creator=cell.getRow().getData(0)[8].toString();
- 	 	 						console.log("Creator:"+creator);
+ 	 	 						
  	 	 						var detail=cell.getRow().getData(0)[2].toString();
- 	 	 						console.log("Details: "+detail);
+ 	 	 						
  	 	 					
  	 	 						var ticket_detail_header=`
  	 	 						<p>
