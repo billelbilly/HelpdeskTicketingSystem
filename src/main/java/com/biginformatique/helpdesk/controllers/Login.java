@@ -1,6 +1,7 @@
 package com.biginformatique.helpdesk.controllers;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,6 +47,7 @@ public class Login extends HttpServlet {
 		String password = request.getParameter("password");
 		HttpSession session = request.getSession();
 		User user=null;
+		LocalDate currentAccessDate=null;
 		int usertype=userDao.validate(username, password);
 		user=userDao.getUserByUsername(username);
 		JSONObject jo = new JSONObject();
@@ -66,6 +68,9 @@ public class Login extends HttpServlet {
 			// Redirect to Admin Page
 			session.setAttribute("username", username);
 			session.setAttribute("userPermission", user.getEtat());
+			//Update Current Access date here
+			currentAccessDate = LocalDate.now();
+			userDao.updateLastAccessOrCurrentAccessDate(user, currentAccessDate, "current");
 			jo.put("username", username);
 			jo.put("user_type", "1");
 			response.setContentType("application/json");
@@ -78,6 +83,9 @@ public class Login extends HttpServlet {
 			// Redirect to Client Page
 			session.setAttribute("username", username);
 			session.setAttribute("userPermission", user.getEtat());
+			//Update Current Access date here
+			currentAccessDate = LocalDate.now();
+			userDao.updateLastAccessOrCurrentAccessDate(user, currentAccessDate, "current");
 			jo.put("username", username);
 			jo.put("user_type", "2");
 			response.setContentType("application/json");
@@ -90,6 +98,9 @@ public class Login extends HttpServlet {
 			// Redirect to UserEntreprise Page
 			session.setAttribute("username", username);
 			session.setAttribute("userPermission", user.getEtat());
+			//Update Current Access date here
+			currentAccessDate = LocalDate.now();
+			userDao.updateLastAccessOrCurrentAccessDate(user, currentAccessDate, "current");
 			jo.put("username", username);
 			jo.put("user_type", "3");
 			response.setContentType("application/json");

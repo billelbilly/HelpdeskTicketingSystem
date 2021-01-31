@@ -1,10 +1,6 @@
 package com.biginformatique.helpdesk.dao;
 
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.mindrot.jbcrypt.BCrypt;
 
+import com.biginformatique.helpdesk.models.Ticket;
 import com.biginformatique.helpdesk.models.User;
 import com.biginformatique.helpdesk.util.HibernateUtil;
 
@@ -54,8 +51,8 @@ public class UserDao {
 			if (user != null && verifyHash(password, user.getPassword())) {
 				LocalDate dateExpiration = user.getDateExpiration();
 				if (dateExpiration != null) {
-					//Date currentdate = new Date(System.currentTimeMillis());
-		
+					// Date currentdate = new Date(System.currentTimeMillis());
+
 					LocalDate currentDate = LocalDate.now();
 					int resultComparaison = currentDate.compareTo(dateExpiration);
 					if (resultComparaison > 0) {
@@ -64,7 +61,7 @@ public class UserDao {
 					} else {
 						return user.getEtat();
 					}
-				}else {
+				} else {
 					return user.getEtat();
 				}
 
@@ -469,6 +466,45 @@ public class UserDao {
 		}
 
 		return false;
+
+	}
+
+	public void updateLastAccessOrCurrentAccessDate(User user, LocalDate DateToUpdate, String op) {
+
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		EntityManager em = session.getEntityManagerFactory().createEntityManager();
+		User userToUpdate = new User();
+		userToUpdate = user;
+
+		try {
+			em.getTransaction().begin();
+			switch (op) {
+			case "last":
+				userToUpdate.setLastAccessDate(DateToUpdate);
+
+				break;
+			case "current":
+				userToUpdate.setCurrentAccessDate(DateToUpdate);
+
+				break;
+
+			default:
+				break;
+			}
+			
+			userToUpdate = em.merge(userToUpdate);
+
+			if (userToUpdate != null) {
+				// commit transaction
+				em.getTransaction().commit();
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
 
 	}
 

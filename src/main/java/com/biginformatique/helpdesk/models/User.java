@@ -70,6 +70,12 @@ public class User implements Serializable {
     @Column(name = "dateExpiration")
     private LocalDate dateExpiration;
     
+    @Column(name = "lastAccessDate")
+    private LocalDate lastAccessDate;
+    
+    @Column(name = "currentAccessDate")
+    private LocalDate currentAccessDate;
+    
     @OneToMany(fetch = FetchType.EAGER ,mappedBy="user")
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Ticket> tickets;
@@ -170,4 +176,22 @@ public class User implements Serializable {
 	public void setResponses(List<Response> responses) {
 		this.responses = responses;
 	}
+
+	public LocalDate getLastAccessDate() {
+		return lastAccessDate;
+	}
+
+	public void setLastAccessDate(LocalDate lastAccessDate) {
+		this.lastAccessDate = lastAccessDate;
+	}
+
+	public LocalDate getCurrentAccessDate() {
+		return currentAccessDate;
+	}
+
+	public void setCurrentAccessDate(LocalDate currentAccessDate) {
+		this.currentAccessDate = currentAccessDate;
+	}
+	
+	
 }
