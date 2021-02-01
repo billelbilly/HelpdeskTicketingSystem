@@ -62,6 +62,8 @@
 
 
 <jsp:include page="Footer.jsp"></jsp:include>
+<script src="resources/js/popper.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
 <script src="resources/js/manageUsers.js"></script>
 <script src="resources/js/contacts/contacts.js"></script>
 <script src="resources/js/Settings.js"></script>

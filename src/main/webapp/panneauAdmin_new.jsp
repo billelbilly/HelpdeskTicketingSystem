@@ -1,11 +1,17 @@
 <jsp:include page="Header.jsp"></jsp:include>
 <%
-		response.setHeader("cache-control", "no-cache,no-store,must-revalidate");
-		if (session.getAttribute("username") == null) {
+	response.setHeader("cache-control", "no-cache,no-store,must-revalidate");
+	if (session.getAttribute("username") == null) {
 
-			response.sendRedirect("index.jsp");
-		}
-	%>
+		response.sendRedirect("index.jsp");
+	}
+%>
+
+<!-- Send user Session To Server -->
+	<input type="text" name="usersession" id="usersession"
+		value="<%=session.getAttribute("username")%>" hidden />
+<input type="text" name="userPermission" id="userPermission"
+	value="<%=session.getAttribute("userPermission")%>" hidden />
 
 
 <!-- Main Content -->
@@ -102,6 +108,8 @@
 
 
 <jsp:include page="Footer.jsp"></jsp:include>
+<script src="resources/js/popper.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
 <script src="resources/js/manageTickets.js"></script>
 <script src="resources/js/Settings.js"></script>
 </body>

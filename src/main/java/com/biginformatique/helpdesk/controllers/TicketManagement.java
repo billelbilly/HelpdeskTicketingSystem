@@ -126,11 +126,86 @@ public class TicketManagement extends HttpServlet {
 			}
 
 			break;
+			
+		case "/getCreatedTickets":
+			try {
+				getCreatedTickets(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+			
+		case "/getResponsesOnTickets":
+			try {
+				getResponsesOnTickets(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+			
+		case "/getAssign&Responses":
+			try {
+				getAssignResponses(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
 
 		default:
 			break;
 		}
 
+	}
+
+	private void getAssignResponses(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String username = request.getParameter("usersession");
+		User user = userDao.getUserByUsername(username);
+		List assignedTickets = ticketDao.getAssignResponsesDao(user);
+
+		JSONObject jo = new JSONObject();
+		// get each ticket username Creator as json object and send
+		// it to the Client Side
+		jo.put("assignedTickets", assignedTickets);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(jo.toString());
+		
+	}
+
+	private void getResponsesOnTickets(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String username = request.getParameter("usersession");
+		User user = userDao.getUserByUsername(username);
+		List responses = ticketDao.getResponsesOnTicketsDao(user);
+
+		JSONObject jo = new JSONObject();
+		// get each ticket username Creator as json object and send
+		// it to the Client Side
+		jo.put("responses", responses);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(jo.toString());
+		
+	}
+
+	private void getCreatedTickets(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String username = request.getParameter("usersession");
+		User user = userDao.getUserByUsername(username);
+		List createdTickets = ticketDao.getCreatedTicketsDao(user);
+
+		JSONObject jo = new JSONObject();
+		// get each ticket username Creator as json object and send
+		// it to the Client Side
+		jo.put("createdTickets", createdTickets);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(jo.toString());
+		
 	}
 
 	private void getPlanificationByTicket(HttpServletRequest request, HttpServletResponse response) throws Exception {

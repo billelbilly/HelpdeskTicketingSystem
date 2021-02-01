@@ -3,6 +3,7 @@ package com.biginformatique.helpdesk.models;
 import java.io.Serializable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -71,10 +72,10 @@ public class User implements Serializable {
     private LocalDate dateExpiration;
     
     @Column(name = "lastAccessDate")
-    private LocalDate lastAccessDate;
+    private LocalDateTime lastAccessDate;
     
     @Column(name = "currentAccessDate")
-    private LocalDate currentAccessDate;
+    private LocalDateTime currentAccessDate;
     
     @OneToMany(fetch = FetchType.EAGER ,mappedBy="user")
     @Fetch(value = FetchMode.SUBSELECT)
@@ -177,19 +178,19 @@ public class User implements Serializable {
 		this.responses = responses;
 	}
 
-	public LocalDate getLastAccessDate() {
+	public LocalDateTime getLastAccessDate() {
 		return lastAccessDate;
 	}
 
-	public void setLastAccessDate(LocalDate lastAccessDate) {
+	public void setLastAccessDate(LocalDateTime lastAccessDate) {
 		this.lastAccessDate = lastAccessDate;
 	}
 
-	public LocalDate getCurrentAccessDate() {
+	public LocalDateTime getCurrentAccessDate() {
 		return currentAccessDate;
 	}
 
-	public void setCurrentAccessDate(LocalDate currentAccessDate) {
+	public void setCurrentAccessDate(LocalDateTime currentAccessDate) {
 		this.currentAccessDate = currentAccessDate;
 	}
 	

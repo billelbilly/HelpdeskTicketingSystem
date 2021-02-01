@@ -199,6 +199,8 @@
 </section>
 
 <jsp:include page="Footer.jsp"></jsp:include>
+<script src="resources/js/popper.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
 <script src="resources/js/chart.js@2.8.0"></script>
 <script src="resources/js/statistics.js"></script>
 <script src="resources/js/Settings.js"></script>

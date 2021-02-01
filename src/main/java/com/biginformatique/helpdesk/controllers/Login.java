@@ -2,6 +2,8 @@ package com.biginformatique.helpdesk.controllers;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -46,11 +48,13 @@ public class Login extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		HttpSession session = request.getSession();
-		User user=null;
-		LocalDate currentAccessDate=null;
-		int usertype=userDao.validate(username, password);
-		user=userDao.getUserByUsername(username);
+		User user = null;
+		LocalDateTime currentAccessDate = null;
+		LocalDateTime lastAccessDate = null;
+		int usertype = userDao.validate(username, password);
+		user = userDao.getUserByUsername(username);
 		JSONObject jo = new JSONObject();
+		DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
 		switch (usertype) {
 
@@ -68,8 +72,13 @@ public class Login extends HttpServlet {
 			// Redirect to Admin Page
 			session.setAttribute("username", username);
 			session.setAttribute("userPermission", user.getEtat());
-			//Update Current Access date here
-			currentAccessDate = LocalDate.now();
+			lastAccessDate=user.getLastAccessDate();
+			if (lastAccessDate==null) {
+				lastAccessDate=LocalDateTime.now();
+			}
+			session.setAttribute("lastAccessDate", lastAccessDate.format(myFormatObj));
+			// Update Current Access date here
+			currentAccessDate = LocalDateTime.now();
 			userDao.updateLastAccessOrCurrentAccessDate(user, currentAccessDate, "current");
 			jo.put("username", username);
 			jo.put("user_type", "1");
@@ -83,8 +92,13 @@ public class Login extends HttpServlet {
 			// Redirect to Client Page
 			session.setAttribute("username", username);
 			session.setAttribute("userPermission", user.getEtat());
-			//Update Current Access date here
-			currentAccessDate = LocalDate.now();
+			lastAccessDate=user.getLastAccessDate();
+			if (lastAccessDate==null) {
+				lastAccessDate=LocalDateTime.now();
+			}
+			session.setAttribute("lastAccessDate", lastAccessDate.format(myFormatObj));
+			// Update Current Access date here
+			currentAccessDate = LocalDateTime.now();
 			userDao.updateLastAccessOrCurrentAccessDate(user, currentAccessDate, "current");
 			jo.put("username", username);
 			jo.put("user_type", "2");
@@ -98,8 +112,13 @@ public class Login extends HttpServlet {
 			// Redirect to UserEntreprise Page
 			session.setAttribute("username", username);
 			session.setAttribute("userPermission", user.getEtat());
-			//Update Current Access date here
-			currentAccessDate = LocalDate.now();
+			lastAccessDate=user.getLastAccessDate();
+			if (lastAccessDate==null) {
+				lastAccessDate=LocalDateTime.now();
+			}
+			session.setAttribute("lastAccessDate", lastAccessDate.format(myFormatObj));
+			// Update Current Access date here
+			currentAccessDate = LocalDateTime.now();
 			userDao.updateLastAccessOrCurrentAccessDate(user, currentAccessDate, "current");
 			jo.put("username", username);
 			jo.put("user_type", "3");
@@ -130,7 +149,6 @@ public class Login extends HttpServlet {
 		default:
 			break;
 		}
-
 
 	}
 

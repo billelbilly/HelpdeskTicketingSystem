@@ -20,15 +20,15 @@ function getFormattedDate(datetoformat) {
 	var formatedDate = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +  date.getHours() + ":" +String(date.getMinutes()).padStart(2, '0');
 	return formatedDate;	
 }
-//var deleteTicket = function(cell, formatterParams) {
-//	var id = cell.getRow().getData(0)[0].toString();
-//	return '<button id='
-//			+ id
-//			+ ' class=" open_modal btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_ticket_modal" data-id='
-//			+ id
-//			+ ' data-toggle="tooltip" title="Supprimer Tiquet"><i class="fa fa-trash fa-sm" style="color:white"></i></button>'
-//
-//};
+var deleteTicket = function(cell, formatterParams) {
+	var id = cell.getRow().getData(0)[0].toString();
+	return '<button id='
+			+ id
+			+ ' class=" open_modal btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_ticket_modal" data-id='
+			+ id
+			+ ' data-toggle="tooltip" title="Supprimer Tiquet"><i class="fa fa-trash fa-sm" style="color:white"></i></button>'
+
+};
 
 var assignTicket = function(cell, formatterParams) {
 	var id = cell.getRow().getData(0)[0].toString();
@@ -295,17 +295,17 @@ function getTicketsTabulator() {
 			
 		}, 
 		
-//		{
-//			formatter : deleteTicket,
-//			align : "center",
-//			width : 51,
-//			headerSort : false,
-//			cellClick : function(e, cell) {
-//				var id = cell.getRow().getData(0)[0].toString();
-//				$(".modal-footer #ticket_id").val(id);
-//
-//			}
-//		},
+		{
+			formatter : deleteTicket,
+			align : "center",
+			width : 51,
+			headerSort : false,
+			cellClick : function(e, cell) {
+				var id = cell.getRow().getData(0)[0].toString();
+				$(".modal-footer #ticket_id").val(id);
+
+			}
+		},
 
 		],
 		groupBy : "3",

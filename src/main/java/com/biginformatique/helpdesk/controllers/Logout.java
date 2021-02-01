@@ -2,6 +2,7 @@ package com.biginformatique.helpdesk.controllers;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -37,7 +38,7 @@ public class Logout extends HttpServlet {
 		session.removeAttribute("username");
 		session.invalidate();
 		//Update Last Access Date Here
-		LocalDate lastAccessDate = LocalDate.now();
+		LocalDateTime lastAccessDate = LocalDateTime.now();
 		userDao.updateLastAccessOrCurrentAccessDate(user, lastAccessDate, "last");
 		response.sendRedirect("index.jsp");
 	

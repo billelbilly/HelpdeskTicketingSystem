@@ -339,4 +339,100 @@ public class TicketDao {
 
 	}
 
+	public List getCreatedTicketsDao(User user) {
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		List createdTickets = null;
+
+		try {
+
+			// start a transaction
+			transaction = session.beginTransaction();
+
+			Query query = session.createQuery(
+					"SELECT T.id FROM Ticket T WHERE T.createDateTime > :lastAccessDate OR T.createDateTime > :currentAccessDate").
+					setParameter("lastAccessDate", user.getLastAccessDate()).
+					setParameter("currentAccessDate", user.getCurrentAccessDate());
+			createdTickets = query.list();
+			// commit transaction
+			transaction.commit();
+
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return createdTickets;
+		
+
+	}
+
+	public List getAssignResponsesDao(User user) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		List assignedTickets = null;
+
+		try {
+
+			// start a transaction
+			transaction = session.beginTransaction();
+
+			Query query = session.createQuery(
+					"SELECT T.id FROM Ticket T WHERE (T.assignedDateTime > :lastAccessDate AND T.AssignedTo= :username) OR (T.assignedDateTime > :currentAccessDate AND T.AssignedTo= :username)").
+					setParameter("lastAccessDate", user.getLastAccessDate()).
+					setParameter("currentAccessDate", user.getCurrentAccessDate()).
+					setParameter("username", user.getUsername());
+			assignedTickets = query.list();
+			// commit transaction
+			transaction.commit();
+
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return assignedTickets;
+	}
+
+	public List getResponsesOnTicketsDao(User user) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		List responses = null;
+
+		try {
+
+			// start a transaction
+			transaction = session.beginTransaction();
+
+			Query query = session.createQuery(
+					"SELECT T.id FROM Ticket T, Response R WHERE"
+					+ " (R.createDateTime > :lastAccessDate OR R.createDateTime > :currentAccessDate) AND (T.user= :user)").
+					setParameter("lastAccessDate", user.getLastAccessDate()).
+					setParameter("currentAccessDate", user.getCurrentAccessDate()).
+					setParameter("user", user);
+			responses = query.list();
+			// commit transaction
+			transaction.commit();
+
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return responses;
+	}
+
 }

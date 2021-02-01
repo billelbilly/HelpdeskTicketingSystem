@@ -1,6 +1,7 @@
 package com.biginformatique.helpdesk.dao;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -469,7 +470,7 @@ public class UserDao {
 
 	}
 
-	public void updateLastAccessOrCurrentAccessDate(User user, LocalDate DateToUpdate, String op) {
+	public void updateLastAccessOrCurrentAccessDate(User user, LocalDateTime currentAccessDate, String op) {
 
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		EntityManager em = session.getEntityManagerFactory().createEntityManager();
@@ -480,11 +481,11 @@ public class UserDao {
 			em.getTransaction().begin();
 			switch (op) {
 			case "last":
-				userToUpdate.setLastAccessDate(DateToUpdate);
+				userToUpdate.setLastAccessDate(currentAccessDate);
 
 				break;
 			case "current":
-				userToUpdate.setCurrentAccessDate(DateToUpdate);
+				userToUpdate.setCurrentAccessDate(currentAccessDate);
 
 				break;
 
