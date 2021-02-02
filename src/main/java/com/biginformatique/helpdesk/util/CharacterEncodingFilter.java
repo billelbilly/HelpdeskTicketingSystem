@@ -23,10 +23,11 @@ public class CharacterEncodingFilter implements Filter {
 	            throws IOException, ServletException {
 	        HttpServletRequest request = (HttpServletRequest) req; 
 	        HttpServletResponse response = (HttpServletResponse) resp; 
+	        
 
 	        request.setCharacterEncoding("UTF8");
 	        //response.setContentType("text/html; charset=UTF-8");
-	        response.setContentType("application/json; charset=UTF-8");
+	       // response.setContentType("application/json; charset=UTF-8");
 	        response.setCharacterEncoding("UTF8"); 
 
 	        chain.doFilter(request, response); 

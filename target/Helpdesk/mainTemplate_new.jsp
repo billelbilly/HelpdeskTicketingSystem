@@ -28,15 +28,15 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 
-<link rel="stylesheet"
+<link rel="stylesheet" type="text/css"
 	href="resources/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css" />
 
 <!-- Custom Css -->
-<link rel="stylesheet" href="resources/assets/css/style.min.css">
+<link rel="stylesheet" type="text/css" href="resources/assets/css/style.min.css">
 
 <link rel="stylesheet" type="text/css"
 	href="resources/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="resources/css/ResetPassword.css">
 
 
@@ -89,7 +89,7 @@
 	max-height: 40%;
 }
 
-#newIssueOfTableView .modal-md{
+#newIssueOfTableView .modal-md {
 	max-width: 40%;
 	max-height: 40%;
 }
@@ -102,10 +102,11 @@ div.responseScroll {
 
 div#ticket_detail_header {
 	/*background-color: lightblue;*/
- 	max-width: 80%; 
+	max-width: 80%;
 	overflow: auto;
 }
-div#ticket_detail_headerOfTableView{
+
+div#ticket_detail_headerOfTableView {
 	/*background-color: lightblue;*/
 	max-width: 80%;
 	overflow: auto;
@@ -174,6 +175,30 @@ input[type=radio]:hover {
 		<ul class="navbar-nav">
 			<li><a href="<%=request.getContextPath()%>/Logout"
 				class="mega-menu" title="Log Out"><i class="zmdi zmdi-power"></i></a></li>
+
+			<!--  -----------------------  Client and UserEntreprise Notifications ------------------------------------------- -->
+			<li class="dropdown"><a href="javascript:void(0);"
+				class="dropdown-toggle" title="Notifications" data-toggle="dropdown"
+				role="button"><i class="zmdi zmdi-notifications"></i>
+					<div class="notify">
+						<!-- 						<span class="heartbit"></span> -->
+						<!-- 						<span class="point">3</span> -->
+
+						<span id="set_heart"></span> <span id="nbrNotif" class="point"></span>
+					</div> </a>
+				<ul class="dropdown-menu slideUp2">
+					<li class="header">Notifications</li>
+					<li class="body">
+						<ul class="menu list-unstyled">
+
+						</ul>
+					</li>
+					<li class="footer">
+						<!-- 					<a href="javascript:void(0);">View All --> <!-- 							Notifications</a> -->
+
+					</li>
+				</ul></li>
+			<!-- ------------------------------------------------------------------------------------------- -->
 		</ul>
 	</div>
 
@@ -194,7 +219,8 @@ input[type=radio]:hover {
 						</a>
 						<div class="detail">
 							<h4>Bienvenue</h4>
-							<small><%=session.getAttribute("username")%></small>
+							<small><%=session.getAttribute("username")%></small> </br> <small><strong>Dernier
+									Accès:</strong> <%=session.getAttribute("lastAccessDate")%></small>
 						</div>
 					</div>
 				</li>
@@ -264,10 +290,11 @@ input[type=radio]:hover {
 				</div>
 
 			</div>
-				<div class="justify-content-center pull-right">
+			<div class="justify-content-center pull-right">
 
-				<button type="button" class="btn btn-info btn-sm" id="listPlanifBtnOfTableView"
-					data-toggle="modal" data-target="#planifList" hidden>
+				<button type="button" class="btn btn-info btn-sm"
+					id="listPlanifBtnOfTableView" data-toggle="modal"
+					data-target="#planifList" hidden>
 					<i class="fa fa-history"></i> Planification
 				</button>
 				<button type="button" class="btn btn-success btn-sm"
@@ -818,179 +845,179 @@ input[type=radio]:hover {
 		</div>
 	</div>
 	<!-- ------------------------------------------------------------------------------------------ -->
-<!-- ----------------------------------------Update Ticket of Table View----------------------------------------- -->
-<div class="modal fade" id="updateIssueOfTableView" tabindex="-1" role="dialog"
-	aria-labelledby="newIssue" aria-hidden="true">
+	<!-- ----------------------------------------Update Ticket of Table View----------------------------------------- -->
+	<div class="modal fade" id="updateIssueOfTableView" tabindex="-1"
+		role="dialog" aria-labelledby="newIssue" aria-hidden="true">
 
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header bg-primary">
-				<h4 class="modal-title text-dark pull-left">
-					<i class="fa fa-edit"></i> Editer Tiquet
-				</h4>
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h4 class="modal-title text-dark pull-left">
+						<i class="fa fa-edit"></i> Editer Tiquet
+					</h4>
+				</div>
+				<form id="updateTicketFormOfTableView"
+					action="<%=request.getContextPath()%>/TicketManagement"
+					method="post" enctype="multipart/form-data">
+					<div class="modal-body">
+						<div class="form-group">
+							<input id="ticket_id" name="ticket_id" type="text"
+								class="form-control" value="" hidden>
+						</div>
+						<div class="form-group">
+							<input id="action" name="action" type="text" class="form-control"
+								value="/UpdateTicket" hidden> <input type="text"
+								name="usersession" value="<%=session.getAttribute("username")%>"
+								hidden />
+						</div>
+
+						<div class="form-group">
+							<input id="objet" name="subject" type="text" class="form-control"
+								placeholder="Objet" required="required">
+						</div>
+						<div class="form-group input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> Sévérité </span>
+							</div>
+							<select name="severity" id="severity">
+								<option>Critique</option>
+								<option>Moyen</option>
+								<option>Normale</option>
+
+							</select>
+						</div>
+						<div class="form-group input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text"> Etat Tiquet </span>
+							</div>
+							<select name="etat_ticket" id="etat_ticket" required>
+								<option>créé</option>
+								<option>fermer</option>
+							</select>
+						</div>
+						<div class="form-group">
+							<textarea id="detail" name="detail" class="form-control"
+								placeholder="Détail du tiquet ou question"
+								style="height: 120px;" required="required"></textarea>
+						</div>
+						<div class="form-group">
+							<div id="bigFileUpdate" class="alert alert-danger" role="alert"
+								hidden></div>
+							<input id="fileUpdate" type="file" name="attachment">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">
+							<i class="fa fa-times"></i> Annuler
+						</button>
+						<button id="saveTicketUpdate" type="submit"
+							class="btn btn-primary pull-right">
+							<i class="fa fa-pencil"></i> Update
+						</button>
+					</div>
+				</form>
 			</div>
-			<form id="updateTicketFormOfTableView"
-				action="<%=request.getContextPath()%>/TicketManagement"
-				method="post" enctype="multipart/form-data">
-				<div class="modal-body">
-					<div class="form-group">
-						<input id="ticket_id" name="ticket_id" type="text"
-							class="form-control" value="" hidden>
-					</div>
-					<div class="form-group">
-						<input id="action" name="action" type="text" class="form-control"
-							value="/UpdateTicket" hidden> <input type="text"
-							name="usersession" value="<%=session.getAttribute("username")%>"
-							hidden />
-					</div>
-
-					<div class="form-group">
-						<input id="objet" name="subject" type="text" class="form-control"
-							placeholder="Objet" required="required">
-					</div>
-					<div class="form-group input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"> Sévérité </span>
-						</div>
-						<select name="severity" id="severity">
-							<option>Critique</option>
-							<option>Moyen</option>
-							<option>Normale</option>
-
-						</select>
-					</div>
-					<div class="form-group input-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"> Etat Tiquet </span>
-						</div>
-						<select name="etat_ticket" id="etat_ticket" required>
-							<option>créé</option>
-							<option>fermer</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<textarea id="detail" name="detail" class="form-control"
-							placeholder="Détail du tiquet ou question" style="height: 120px;"
-							required="required"></textarea>
-					</div>
-					<div class="form-group">
-						<div id="bigFileUpdate" class="alert alert-danger" role="alert"
-							hidden></div>
-						<input id="fileUpdate" type="file" name="attachment">
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger" data-dismiss="modal">
-						<i class="fa fa-times"></i> Annuler
-					</button>
-					<button id="saveTicketUpdate" type="submit"
-						class="btn btn-primary pull-right">
-						<i class="fa fa-pencil"></i> Update
-					</button>
-				</div>
-			</form>
 		</div>
 	</div>
-</div>
-<!-- --------------------------------------------------------------------------------------------------- -->
-<!-- ---------------------------------New Ticket of Table View------------------------------------------ -->
-		<div class="modal fade" id="newIssueOfTableView" tabindex="-1" role="dialog"
-				aria-labelledby="newIssue" aria-hidden="true">
+	<!-- --------------------------------------------------------------------------------------------------- -->
+	<!-- ---------------------------------New Ticket of Table View------------------------------------------ -->
+	<div class="modal fade" id="newIssueOfTableView" tabindex="-1"
+		role="dialog" aria-labelledby="newIssue" aria-hidden="true">
 
-				<div class="modal-dialog modal-md">
-					<div class="modal-content">
-						<div class="modal-header bg-primary">
-							<h4 class="modal-title text-dark pull-left">
-								<i class="fa fa-pencil"></i> Crée Nouveau Tiquet
-							</h4>
-						</div>
-						<form id="ticketFormOfTableView"
-							action="<%=request.getContextPath()%>/TicketManagement"
-							method="post" enctype="multipart/form-data" autocomplete="off">
-							<div class="modal-body">
-								<div class="form-group" hidden>
-									<input type="text" name="action" id="action"
-										value="/CreateTicket" />
-								</div>
-								<div class="form-group">
-									<input name="subject" type="text" class="form-control"
-										placeholder="Objet"
-										oninvalid="this.setCustomValidity('Objet obligatoire !')"
-										oninput="setCustomValidity('')" required>
-								</div>
-								<div class="d-flex justify-content-center">
-									<div class="form-group input-group">
-										<div class="input-group-prepend">
-											<span class="input-group-text"> Sévérité </span>
-										</div>
-										<select name="severity" id="severity" style='width: 150px;'>
-											<option>Critique</option>
-											<option>Moyen</option>
-											<option>Normale</option>
-
-										</select>
-
-									</div>
-									<div class="form-group input-group">
-										<div class="input-group-prepend">
-											<span class="input-group-text"> Logiciel </span>
-										</div>
-										<select name=listLogiciel id="listLogicielOfTableView"
-											style='width: 150px;' required>
-
-										</select>
-									</div>
-									<div class="form-group input-group">
-										<div class="input-group-prepend">
-											<span class="input-group-text"> Version </span>
-										</div>
-										<select name=listVersion id="listVersionOfTableView"
-											style='width: 150px;'
-											oninvalid="this.setCustomValidity('SVP Choisissez Le Logiciel et sa Version !')"
-											oninput="setCustomValidity('')" required>
-
-										</select>
-									</div>
-								</div>
-
-								<div class="form-group">
-									<textarea name="detail" class="form-control"
-										placeholder="Détail du tiquet ou question"
-										style="height: 120px;"
-										oninvalid="this.setCustomValidity('Détails obligatoire !')"
-										oninput="setCustomValidity('')" required></textarea>
-								</div>
-								<div class="form-group">
-									<div id="bigFile" class="alert alert-danger" role="alert"
-										hidden></div>
-									<input id="file" type="file" name="attachment">
-								</div>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-danger"
-									data-dismiss="modal">
-									<i class="fa fa-times"></i> Annuler
-								</button>
-								<button id="saveTicket" type="submit"
-									class="btn btn-primary pull-right">
-									<i class="fa fa-pencil"></i> Créer
-								</button>
-							</div>
-						</form>
-					</div>
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h4 class="modal-title text-dark pull-left">
+						<i class="fa fa-pencil"></i> Crée Nouveau Tiquet
+					</h4>
 				</div>
+				<form id="ticketFormOfTableView"
+					action="<%=request.getContextPath()%>/TicketManagement"
+					method="post" enctype="multipart/form-data" autocomplete="off">
+					<div class="modal-body">
+						<div class="form-group" hidden>
+							<input type="text" name="action" id="action"
+								value="/CreateTicket" />
+						</div>
+						<div class="form-group">
+							<input name="subject" type="text" class="form-control"
+								placeholder="Objet"
+								oninvalid="this.setCustomValidity('Objet obligatoire !')"
+								oninput="setCustomValidity('')" required>
+						</div>
+						<div class="d-flex justify-content-center">
+							<div class="form-group input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"> Sévérité </span>
+								</div>
+								<select name="severity" id="severity" style='width: 150px;'>
+									<option>Critique</option>
+									<option>Moyen</option>
+									<option>Normale</option>
+
+								</select>
+
+							</div>
+							<div class="form-group input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"> Logiciel </span>
+								</div>
+								<select name=listLogiciel id="listLogicielOfTableView"
+									style='width: 150px;' required>
+
+								</select>
+							</div>
+							<div class="form-group input-group">
+								<div class="input-group-prepend">
+									<span class="input-group-text"> Version </span>
+								</div>
+								<select name=listVersion id="listVersionOfTableView"
+									style='width: 150px;'
+									oninvalid="this.setCustomValidity('SVP Choisissez Le Logiciel et sa Version !')"
+									oninput="setCustomValidity('')" required>
+
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<textarea name="detail" class="form-control"
+								placeholder="Détail du tiquet ou question"
+								style="height: 120px;"
+								oninvalid="this.setCustomValidity('Détails obligatoire !')"
+								oninput="setCustomValidity('')" required></textarea>
+						</div>
+						<div class="form-group">
+							<div id="bigFile" class="alert alert-danger" role="alert" hidden></div>
+							<input id="file" type="file" name="attachment">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">
+							<i class="fa fa-times"></i> Annuler
+						</button>
+						<button id="saveTicket" type="submit"
+							class="btn btn-primary pull-right">
+							<i class="fa fa-pencil"></i> Créer
+						</button>
+					</div>
+				</form>
 			</div>
-			<!-- ------------------------------------------------------------------------------------ -->
+		</div>
+	</div>
+	<!-- ------------------------------------------------------------------------------------ -->
 
 
 	<jsp:include page="Footer.jsp"></jsp:include>
+	<script src="resources/js/popper.min.js"></script>
+	<script src="resources/js/bootstrap.min.js"></script>
 	<script src="resources/js/jquery.quicksearch.js"></script>
 	<script src="resources/js/jquery.twbsPagination.min.js"></script>
 	<script src="resources/js/xlsx.full.min.js"></script>
 	<script src="resources/js/jspdf.min.js"></script>
 	<script src="resources/js/jspdf.plugin.autotable.js"></script>
 	<script src="resources/js/ticketTemplate.js"></script>
-<!-- 	<script src="resources/js/ValidatePlanificationDates.js"></script> -->
+	<!-- 	<script src="resources/js/ValidatePlanificationDates.js"></script> -->
 	<script src="resources/js/mainTemplate_new.js"></script>
 
 

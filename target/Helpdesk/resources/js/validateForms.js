@@ -172,7 +172,7 @@ $(document).ready(function () {
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				$("#semiTransparentDiv").hide();
-				alert(errorThrown);
+				alert("Erreur Serveur Contactez Votre Administrateur");
 			},
 		});
 	});

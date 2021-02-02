@@ -12,7 +12,7 @@
 	rel="stylesheet">
 
 <!-- CSS -->
-<link href="resources/assets_index/css/main.css" rel="stylesheet">
+<link  rel="stylesheet" type="text/css" href="resources/assets_index/css/main.css">
 <link rel="stylesheet" type="text/css"
 	href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 </head>
@@ -83,6 +83,6 @@
 	<script src="resources/js/jquery-3.5.1.min.js"></script>
 	<script src="resources/assets_index/js/vendor/modernizr-2.8.3.min.js"></script>
 	<script src="resources/assets_index/js/plugins/animate-headline.js"></script>
-	<script src="resources/assets_index/main.js"></script>
+	<script src="resources/assets_index/js/main.js"></script>
 </body>
 </html>

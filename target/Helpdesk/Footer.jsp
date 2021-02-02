@@ -1301,7 +1301,8 @@
 <!-- ------------------------------------------------------------------------------------------ -->
 
 <script src="resources/js/jquery-3.5.1.min.js"></script>
-<script src="resources/js/bootstrap.min.js"></script>
+<!-- <script src="resources/js/popper.min.js"></script> -->
+<!-- <script src="resources/js/bootstrap.min.js"></script> -->
 <script src="resources/js/moment.min.js"></script>
 <script src="resources/js/select2.min.js" defer></script>
 <script src="resources/js/tabulator.min.js"></script>
@@ -1309,7 +1310,6 @@
 <!-- <script src="resources/js/manageTickets.js"></script> -->
 <!-- <script src="resources/js/manageUsers.js"></script> -->
 <script src="resources/js/mainTemplate.js"></script>
-<script src="resources/js/popper.js"></script>
 <script src="resources/assets/bundles/libscripts.bundle.js"></script>
 <script src="resources/assets/bundles/vendorscripts.bundle.js"></script>
 <script src="resources/assets/bundles/jvectormap.bundle.js"></script>
@@ -1323,6 +1323,8 @@
 <!-- <script src="resources/js/Settings.js"></script> -->
 <!-- <script src="resources/js/validateForms.js"></script> -->
 <script src="resources/js/ValidatePlanificationDates.js"></script>
+<script src="resources/js/Notifications.js"></script>
+
 
 
 

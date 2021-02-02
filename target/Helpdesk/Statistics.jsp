@@ -6,6 +6,11 @@
 			response.sendRedirect("index.jsp");
 		}
 	%>
+	<!-- Send user Session To Server -->
+	<input type="text" name="usersession" id="usersession"
+		value="<%=session.getAttribute("username")%>" hidden />
+<input type="text" name="userPermission" id="userPermission"
+	value="<%=session.getAttribute("userPermission")%>" hidden />
 
 <!-- Main Content -->
 
@@ -199,6 +204,8 @@
 </section>
 
 <jsp:include page="Footer.jsp"></jsp:include>
+<script src="resources/js/popper.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
 <script src="resources/js/chart.js@2.8.0"></script>
 <script src="resources/js/statistics.js"></script>
 <script src="resources/js/Settings.js"></script>

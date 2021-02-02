@@ -27,15 +27,11 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 
-<link rel="stylesheet"
+<link rel="stylesheet" type="text/css"
 	href="resources/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css" />
-<link rel="stylesheet"
-	href="resources/assets/plugins/charts-c3/plugin.css" />
 
-<link rel="stylesheet"
-	href="resources/assets/plugins/morrisjs/morris.min.css" />
 <!-- Custom Css -->
-<link rel="stylesheet" href="resources/assets/css/style.min.css">
+<link rel="stylesheet" type="text/css" href="resources/assets/css/style.min.css">
 <link rel="stylesheet" type="text/css"
 	href="resources/css/ResetPassword.css">
 
@@ -120,6 +116,32 @@ div.progress {
 		<ul class="navbar-nav">
 			<li><a href="<%=request.getContextPath()%>/Logout"
 				class="mega-menu" title="Log Out"><i class="zmdi zmdi-power"></i></a></li>
+
+			<!--  -----------------------  Admin Notifications ------------------------------------------- -->
+			<li class="dropdown"><a href="javascript:void(0);"
+				class="dropdown-toggle" title="Notifications" data-toggle="dropdown"
+				role="button"><i class="zmdi zmdi-notifications"></i>
+					<div class="notify">
+<!-- 						<span class="heartbit"></span> -->
+<!-- 						<span class="point">3</span> -->
+						
+						<span id="set_heart"></span>
+						<span id="nbrNotif" class="point"></span>
+					</div> </a>
+				<ul class="dropdown-menu slideUp2">
+					<li class="header">Notifications</li>
+					<li class="body">
+						<ul class="menu list-unstyled">
+
+						</ul>
+					</li>
+					<li class="footer">
+<!-- 					<a href="javascript:void(0);">View All -->
+<!-- 							Notifications</a> -->
+							
+							</li>
+				</ul></li>
+			<!-- ------------------------------------------------------------------------------------------- -->
 		</ul>
 	</div>
 
@@ -141,6 +163,8 @@ div.progress {
 						<div class="detail">
 							<h4>Bienvenue</h4>
 							<small><%=session.getAttribute("username")%></small>
+							</br>
+							<small><strong>Dernier Accès:</strong> <%=session.getAttribute("lastAccessDate")%></small>
 						</div>
 					</div>
 				</li>
@@ -152,8 +176,7 @@ div.progress {
 				<li><a href="Users&Contacts.jsp"><i
 						class="zmdi zmdi-account-box-mail"></i><span>Utilisateurs &
 							Contacts</span></a></li>
-				<li><a href="Statistics.jsp"><i
-						class="zmdi zmdi-chart"></i><span>Statistiques</span></a></li>
+				<li><a href="Statistics.jsp"><i class="zmdi zmdi-chart"></i><span>Statistiques</span></a></li>
 
 				<li><a data-toggle="modal" data-target="#Settings"
 					href="javascript:void(0)"><i class="zmdi zmdi-settings"></i><span>Paramètres</span></a></li>

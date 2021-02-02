@@ -28,11 +28,11 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
 
-<link rel="stylesheet"
+<link rel="stylesheet" type="text/css"
 	href="resources/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css" />
 
 <!-- Custom Css -->
-<link rel="stylesheet" href="resources/assets/css/style.min.css">
+<link rel="stylesheet" type="text/css" href="resources/assets/css/style.min.css">
 
 <link rel="stylesheet" type="text/css"
 	href="resources/css/bootstrap-datetimepicker.min.css">
