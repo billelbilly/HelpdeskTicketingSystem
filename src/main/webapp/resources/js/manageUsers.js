@@ -299,14 +299,14 @@ $("#validateForm")
 														'<img src="resources/images/Check_24x24.png" alt="IMG">');
 
 									} else {
-										alert("Validation Failed !");
+										alert("Erreur Serveur Contactez Votre Administrateur");
 									}
 
 								},
 								error : function(XMLHttpRequest, textStatus,
 										errorThrown) {
 									$("#semiTransparentDiv").hide();
-									alert(errorThrown);
+									alert("Erreur Serveur Contactez Votre Administrateur");
 								},
 							});
 				});
@@ -341,7 +341,7 @@ $("#DeleteUserForm").submit(function(e) {
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert(errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });
@@ -400,13 +400,13 @@ $("#editForm").submit(function(e) {
             	$("#emailAlertEditUser").text('Email existe déjà !');
 	
 			} else {
-				alert("Update User Failed !")
+				alert("Erreur Serveur Contactez Votre Administrateur")
 			}
 
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert(errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });

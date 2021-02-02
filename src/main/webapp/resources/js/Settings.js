@@ -125,7 +125,7 @@ $(".option-heading").on(
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
 					$("#semiTransparentDiv").hide();
-					alert("Init Settings Form Error: " + errorThrown);
+					alert("Erreur Serveur Contactez Votre Administrateur");
 				},
 			});
 
@@ -218,7 +218,7 @@ $("#MailingSettingForm").submit(function(e) {
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert("Saving Settings Error: " + errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });
@@ -331,7 +331,7 @@ $("#VersionForm").submit(
 				},
 				error : function(XMLHttpRequest, textStatus, errorThrown) {
 					$("#semiTransparentDiv").hide();
-					alert("Version Settings Error: " + errorThrown);
+					alert("Erreur Serveur Contactez Votre Administrateur");
 				},
 			});
 		});
@@ -386,7 +386,7 @@ $("#LogicielVersionForm").submit(function(e) {
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert("Logiciel Version Settings Error: " + errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });

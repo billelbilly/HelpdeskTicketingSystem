@@ -208,7 +208,7 @@ $("#updatePasswordForm").submit(function(e) {
 		},
 		error: function (XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert("Change Password Error: "+errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });

@@ -347,7 +347,7 @@ $(document).ready(function() {
 						},
 						error: function (XMLHttpRequest, textStatus, errorThrown) {
 							$("#semiTransparentDiv").hide();
-							alert("Error When getting Responses"+errorThrown);
+							alert("Erreur Serveur Contactez Votre Administrateur");
 						},
 					});
 					// *****************************************************************//
@@ -478,7 +478,7 @@ $(document).ready(function() {
 								},
 								error: function (XMLHttpRequest, textStatus, errorThrown) {
 									$("#semiTransparentDiv").hide();
-									alert("Init Planif Form Server Error: "+errorThrown);
+									alert("Erreur Serveur Contactez Votre Administrateur");
 								},
 						});
 						
@@ -571,7 +571,7 @@ $(document).ready(function() {
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				$("#semiTransparentDiv").hide();
-				alert("Get Tickets Not Working:  "+errorThrown);
+				alert("Erreur Serveur Contactez Votre Administrateur");
 			},
 		});
 		///**************************************************************///
@@ -643,7 +643,7 @@ $(document).ready(function() {
 				},
 				error: function (XMLHttpRequest, textStatus, errorThrown) {
 					$("#semiTransparentDiv").hide();
-					alert("Filtre Ticket Error: "+errorThrown);
+					alert("Erreur Serveur Contactez Votre Administrateur");
 				},
 		});
 		
@@ -714,7 +714,7 @@ $(document).ready(function() {
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				$("#semiTransparentDiv").hide();
-				alert("Save Ticket Server Error: "+errorThrown);
+				alert("Erreur Serveur Contactez Votre Administrateur");
 			},
 		});
 	});
@@ -739,13 +739,13 @@ $(document).ready(function() {
 				if (data.success) {
 					RefreshPage();
 				}else {
-					alert("Error occured when saving the Response !");
+					alert("Erreur Serveur Contactez Votre Administrateur");
 				}
 
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				$("#semiTransparentDiv").hide();
-				alert("Submit Response Error: "+errorThrown);
+				alert("Erreur Serveur Contactez Votre Administrateur");
 			},
 		});
 	});
@@ -775,13 +775,13 @@ $(document).ready(function() {
 					
 					RefreshPage();
 				}else {
-					alert("Error occured when Updating Ticket!");
+					alert("Erreur Serveur Contactez Votre Administrateur");
 				}
 
 			},
 			error: function (XMLHttpRequest, textStatus, errorThrown) {
 				$("#semiTransparentDiv").hide();
-				alert("Update Ticket Error: "+errorThrown);
+				alert("Erreur Serveur Contactez Votre Administrateur");
 			},
 		});
 	});
@@ -901,7 +901,7 @@ $(document).ready(function() {
 			},
 			error : function(XMLHttpRequest, textStatus, errorThrown) {
 				$("#semiTransparentDiv").hide();
-				alert("Ticket Planifcation Error "+errorThrown);
+				alert("Erreur Serveur Contactez Votre Administrateur");
 			},
 		});
 	});

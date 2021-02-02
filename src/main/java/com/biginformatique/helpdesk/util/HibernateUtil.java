@@ -22,19 +22,25 @@ import com.biginformatique.helpdesk.models.Version;
 public class HibernateUtil {
 
 	private static SessionFactory sessionFactory;
+	private static String DB_URL;
+	private static String DB_USER;
+	private static String DB_PASS;
 
 	public static SessionFactory getSessionFactory() {
+		
 		if (sessionFactory == null) {
 			try {
 				Configuration configuration = new Configuration();
+				DB_URL=System.getenv("$DB_URL");
+				DB_USER=System.getenv("$DB_USER");
+				DB_PASS=System.getenv("$DB_PASS");
 
 				// Hibernate settings equivalent to hibernate.cfg.xml's properties
 				Properties settings = new Properties();
 				settings.put(Environment.DRIVER, "com.mysql.jdbc.Driver");
-				settings.put(Environment.URL,
-						"jdbc:mysql://localhost:3307/helpdesk?allowPublicKeyRetrieval=true&useSSL=false&useTimezone=true&serverTimezone=GMT%2B1&useLegacyDatetimeCode=false&useUnicode=true&characterEncoding=utf8");
-				settings.put(Environment.USER, "root");
-				settings.put(Environment.PASS, "root");
+				settings.put(Environment.URL,DB_URL);
+				settings.put(Environment.USER, DB_USER);
+				settings.put(Environment.PASS, DB_PASS);
 				settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL8Dialect");
 
 				settings.put(Environment.SHOW_SQL, "true");

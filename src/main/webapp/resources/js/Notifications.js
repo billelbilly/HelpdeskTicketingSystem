@@ -8,7 +8,7 @@
 		action="/getAssign&Responses";	
 	}
 	
-//setInterval(function(){
+setInterval(function(){
 	
 
 $.ajax({
@@ -173,7 +173,7 @@ $.ajax({
 		},
 	});
 
-//}, 30000);
+}, 30000);
 
 $(".dropdown-toggle").on("click",function(){
 	$("#nbrNotif").text('');

@@ -6,6 +6,11 @@
 			response.sendRedirect("index.jsp");
 		}
 	%>
+	<!-- Send user Session To Server -->
+	<input type="text" name="usersession" id="usersession"
+		value="<%=session.getAttribute("username")%>" hidden />
+<input type="text" name="userPermission" id="userPermission"
+	value="<%=session.getAttribute("userPermission")%>" hidden />
 
 <!-- Main Content -->
 

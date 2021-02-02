@@ -87,8 +87,7 @@ function getUsersEntreprise() {
 
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
-			alert("Error Occured when Populating UserEntreprise List: "
-					+ errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 
@@ -193,7 +192,7 @@ function getTicketsTabulator() {
 										// response json object
 		},
 		ajaxError : function(xhr, textStatus, errorThrown) {
-			alert("Error Occured !" + errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 		// layout:"fitDataStretch", //fit columns to width of table (optional)
 		layout : "fitColumns",
@@ -377,7 +376,7 @@ $("#DeleteTicketForm").submit(function(e) {
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert("Error Occured when Deleting the Ticket: " + errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });
@@ -415,7 +414,7 @@ $("#AssignTicketForm").submit(function(e) {
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
 			$("#semiTransparentDiv").hide();
-			alert("Assign Ticket Error: " + errorThrown);
+			alert("Erreur Serveur Contactez Votre Administrateur");
 		},
 	});
 });
