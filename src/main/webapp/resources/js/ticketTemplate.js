@@ -188,9 +188,10 @@ $(document).ready(function() {
 												class="number pull-right"># ${ticket[0]}</span>
 											<p class="info">
 												créé par: <strong class="text-dark"> @${ticket[8]}</strong> le: ${date} <i
-													class="fa fa-comments"></i> <a id="${ticket[0]}"
+													class="fa fa-comments"></i> <a id="responseBtn-${ticket[0]}"
 													class="btn  btn-info btn-sm" href="#" role="button" data-toggle="modal"	data-target="#issue">
 													Réponses</a>
+												<button id="responseHistory-${ticket[0]}" class="btn btn-sm btn-info " data-toggle="modal" data-target="#responseHistory" hidden><i class="fa fa-comments" style="pointer-events: none;"></i> Historique</button>
 											</p>
 										</div>
 									</div>
@@ -213,11 +214,19 @@ $(document).ready(function() {
 			    	$("#listPlanifBtn").removeAttr("hidden");
 			    	if (ticket[3]!=="fermer") {
 			    		$("#planif-"+ticket[0]+"").removeAttr("hidden");
-					}
-			    	
+			    				
+					}			    	
 			    	
 			    	
 				}
+			    
+			    if (ticket[3]==="fermer") {
+		    		$("#responseBtn-"+ticket[0]+"").hide();
+		    		$("#responseHistory-"+ticket[0]+"").removeAttr("hidden");
+			
+				}	
+			    
+	   
 				switch (ticket[4]) {
 				case "Critique":
 					
@@ -262,11 +271,13 @@ $(document).ready(function() {
 				// ****** When Clicking on Ticket Reponses This Happens
 				// ***************//
 				
-				$("#"+ticket[0]+"").click(function (e) {
+				$("#responseBtn-"+ticket[0]+"").click(function (e) {
 					var search_response=$('input.search_response').quicksearch('ul.media-list li');
 					
-					
 					var ticket_id=$((e.target)).attr('id');
+					ticket_id=""+ticket_id+"";
+					ticket_id = ticket_id.replace(/[^0-9]/g,'');					
+			
 					var ticket_detail_header=`
 					<p>
 					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[8]}</strong>
@@ -281,6 +292,8 @@ $(document).ready(function() {
 					$('#ticket_detail_header').append(ticket_detail_header);
 					$(".modal #ticket_id").val(ticket_id);
 					$(".modal #responseDetail").val('');
+					
+						    
 					
 					showLoader();
 					
@@ -316,12 +329,11 @@ $(document).ready(function() {
 								objResponse.forEach(function(response) {
 								    
 								    var date_creation_response=getFormattedDate(response[2],"resp");
-								    
 								  
 									var ticket_response=`
 									
 									<li class="media">
-										    <!--<input type="number" name="inputName" id="rating1" class="rating text-warning" data-clearable="remove"/>-->
+										   <div id="review"></div>
 												<div class="media-body">
 												
 													<span class="text-muted pull-right"> <small
@@ -351,9 +363,107 @@ $(document).ready(function() {
 						},
 					});
 					// *****************************************************************//
+				
 					
-					/// Filter Response Here
-					// /******** Filtre Responses ***************///
+					
+
+				});
+				// *************************************************************//
+				
+				
+				// ****** When Clicking on Ticket History This Happens
+				// ***************//
+				
+				$("#responseHistory-"+ticket[0]+"").click(function (e) {
+					var search_response=$('input.search_response').quicksearch('ul.media-list li');
+					
+					var ticket_id=$((e.target)).attr('id');
+					ticket_id=""+ticket_id+"";
+					ticket_id = ticket_id.replace(/[^0-9]/g,'');					
+			
+					var ticket_detail_header=`
+					<p>
+					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[8]}</strong>
+					   le: ${date}
+					</p>
+				    <p>${ticket[2]}</p>	
+					`;
+					$( "#ticket_detail_header_history p" ).remove();
+					$(".modal #historyList li").remove();
+					$('.response_list div').remove();
+					$('.ticket_list div').remove();
+					$('#ticket_detail_header_history').append(ticket_detail_header);
+				
+					
+					showLoader();
+					
+					
+					// ************ Get Responses By Ticket 
+					// Id****************//
+					
+					$.ajax({
+						type: "GET",
+						url: "/Helpdesk/ResponseManagement",
+						data: { 
+						    ticket_id: ticket_id,
+						    action: "/getResponses"
+						  },
+						dataType: "json",
+						
+						success: function (data) {
+							$("#semiTransparentDiv").hide();
+					
+							var objResponse=data.responses;
+							var userResponseSession;
+							
+							var isNotNull=false;
+							for(var prop in objResponse) {
+							    if(objResponse.hasOwnProperty(prop)) {
+							    	isNotNull=true;
+							    }
+							  }
+							
+							if (isNotNull) {
+				
+								
+								objResponse.forEach(function(response) {
+								    
+								    var date_creation_response=getFormattedDate(response[2],"resp");
+								  
+									var ticket_response=`
+									
+									<li class="media">
+										   <div id="review"></div>
+												<div class="media-body">
+												
+													<span class="text-muted pull-right"> <small
+														class="text-muted">Réponse le: ${date_creation_response}</small>
+													</span> <strong class="text-success">  @${response[3]}</strong>
+													<p>
+														${response[1]}
+														
+													</p>
+												</div>
+									
+								     </li>`;
+									
+									$( "#historyList" ).append(ticket_response);
+									
+								});
+								search_response.cache();
+							}else {
+
+								$('.response_list').append('<div class="alert alert-warning" role="alert">Pas de Réponses pour le moment !</div>');
+							}
+
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							$("#semiTransparentDiv").hide();
+							alert("Erreur Serveur Contactez Votre Administrateur");
+						},
+					});
+					// *****************************************************************//
+				
 					
 					
 
@@ -1092,8 +1202,8 @@ $(document).ready(function() {
 	////***********************************************************************************////
 	
 
-	// initialize with defaults
-//	$("#rating1").rating();
+	// initialize Rating
+	$("#review").rating();
 	
 	//Clear Search and back to first page 
 	$("#search").keydown(function(){

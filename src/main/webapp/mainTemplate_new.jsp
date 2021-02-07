@@ -32,7 +32,8 @@
 	href="resources/assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.css" />
 
 <!-- Custom Css -->
-<link rel="stylesheet" type="text/css" href="resources/assets/css/style.min.css">
+<link rel="stylesheet" type="text/css"
+	href="resources/assets/css/style.min.css">
 
 <link rel="stylesheet" type="text/css"
 	href="resources/css/bootstrap-datetimepicker.min.css">
@@ -497,6 +498,7 @@ input[type=radio]:hover {
 
 														</div>
 														<div class="card-body">
+
 															<div class="option-heading">Ajouter Réponse</div>
 															<div class="option-content is-hidden">
 																<form id="responseForm"
@@ -524,6 +526,7 @@ input[type=radio]:hover {
 
 																</form>
 															</div>
+
 
 
 															<div class="response_list mt-5"></div>
@@ -1007,6 +1010,76 @@ input[type=radio]:hover {
 	</div>
 	<!-- ------------------------------------------------------------------------------------ -->
 
+	<!-- Responses History -->
+	<div class="modal fade" id="responseHistory" tabindex="-1"
+		role="dialog" aria-labelledby="issue" aria-hidden="true">
+		<div class="modal-wrapper">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header bg-primary">
+						<!-- <button type="button" class="close" data-dismiss="modal" -->
+						<!-- aria-hidden="true">×</button> -->
+						<h4 class="modal-title text-dark">
+							<i class="fa fa-info-circle"></i> Historique des Réponses
+						</h4>
+					</div>
+
+					<div class="modal-body">
+
+						<!-- Ticket Details -->
+						<div class="row">
+							
+							<div id="ticket_detail_header_history" class="col-md-10"></div>
+						</div>
+						<!-- End Ticket Details -->
+						<!-- Ticket response comments -->
+						<hr>
+
+						<div class="row bootstrap snippets bootdeys">
+							<div class="col-md-12">
+								<div class="comment-wrapper">
+									<div class="card border-primary">
+										<div class="card-header bg-primary">
+											<span class="text-white">Réponses</span>
+											<div class="pull-right">
+												<input class="search_response" type="text" name="search"
+													placeholder="Recherche" autofocus="autofocus">
+
+											</div>
+
+										</div>
+										<div class="card-body">
+
+											<div class="response_list_history mt-5"></div>
+
+											<div class="responseScroll">
+												<ul id="historyList" class="media-list">
+
+
+												</ul>
+											</div>
+
+										</div>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<!-- End Ticket response comments -->
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">
+							<i class="fa fa-times"></i> Fermer
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Responses History -->
+
 
 	<jsp:include page="Footer.jsp"></jsp:include>
 	<script src="resources/js/popper.min.js"></script>
@@ -1016,8 +1089,8 @@ input[type=radio]:hover {
 	<script src="resources/js/xlsx.full.min.js"></script>
 	<script src="resources/js/jspdf.min.js"></script>
 	<script src="resources/js/jspdf.plugin.autotable.js"></script>
+	<script src="resources/js/rating.js"></script>
 	<script src="resources/js/ticketTemplate.js"></script>
-	<!-- 	<script src="resources/js/ValidatePlanificationDates.js"></script> -->
 	<script src="resources/js/mainTemplate_new.js"></script>
 
 
