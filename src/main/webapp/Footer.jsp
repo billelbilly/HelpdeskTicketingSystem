@@ -38,7 +38,7 @@
 											</span>
 										</div>
 										<input name="lastName" id="nom_id" class="form-control"
-											placeholder="Nom" type="text">
+											placeholder="Nom Client/Utilisateur" type="text" required>
 									</div>
 									<!-- form-group// -->
 									<div id="emailAlertEditUser" class="alert alert-danger" role="alert"
@@ -187,7 +187,7 @@
 											</span>
 										</div>
 										<input name="lastName" id="nomRegister_id"
-											class="form-control" placeholder="Nom" type="text">
+											class="form-control" placeholder="Nom Client/Utilisateur" type="text" required>
 									</div>
 									<!-- form-group// -->
 									<div id="emailAlert" class="alert alert-danger" role="alert"
@@ -1315,7 +1315,7 @@
 <script src="resources/assets/bundles/jvectormap.bundle.js"></script>
 <script src="resources/assets/bundles/sparkline.bundle.js"></script>
 <script src="resources/assets/bundles/c3.bundle.js"></script>
-<script src="resources/js/bootstrap-datetimepicker.min.js"></script>
+<!-- <script src="resources/js/bootstrap-datetimepicker.min.js"></script> -->
 <script src="resources/js/datepicker.js"></script>
 <script src="resources/js/datepickerForAdmin.js"></script>
 <script src="resources/assets/bundles/mainscripts.bundle.js"></script>

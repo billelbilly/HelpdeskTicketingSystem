@@ -77,7 +77,7 @@ function getUsersEntreprise() {
 
 			for (var i = 0; i < data.length; i++) {
 				$('#userEntreprise').append(
-						'<option value="' + data[i][0] + '">' + data[i][5]
+						'<option value="' + data[i][0] + '">' + data[i][2]
 								+ '</option>');
 
 			}
@@ -203,6 +203,13 @@ function getTicketsTabulator() {
 			{
 				title : "N° Ticket",
 				field : "0",
+				headerFilter : true,
+				headerFilterPlaceholder:"Recherche",
+			},
+			// Define Table Columns
+			{
+				title : "Client/User",
+				field : "8",
 				headerFilter : true,
 				headerFilterPlaceholder:"Recherche",
 			},

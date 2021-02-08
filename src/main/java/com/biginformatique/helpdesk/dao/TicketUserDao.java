@@ -38,10 +38,10 @@ public class TicketUserDao {
 				//Get username From ticketuser
 				user=userDao.getUserById(ticketuser.getUser_id());
 				
-				String updateTicket = "UPDATE Ticket set AssignedTo= :username WHERE ticket_id = :ticket_id";
+				String updateTicket = "UPDATE Ticket set AssignedTo= :lastName WHERE ticket_id = :ticket_id";
 				Query query = session.createQuery(updateTicket);
 				query.setParameter("ticket_id", ticketuser.getTicket_id());
-				query.setParameter("username", user.getUsername());
+				query.setParameter("lastName", user.getLastName());
 				query.executeUpdate();
 				// commit transaction
 				transaction.commit();

@@ -1,13 +1,13 @@
 
-//var deleteUser = function(cell, formatterParams) {
-//	var id = cell.getRow().getData(0)[0].toString();
-//	return '<button id='
-//			+ id
-//			+ ' class=" open_modal btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_user_modal" data-id='
-//			+ id
-//			+ ' data-toggle="tooltip" title="Delete User"><i class="fa fa-trash fa-sm" style="color:white"></i></button>'
-//
-//};
+var deleteUser = function(cell, formatterParams) {
+	var id = cell.getRow().getData(0)[0].toString();
+	return '<button id='
+			+ id
+			+ ' class=" open_modal btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_user_modal" data-id='
+			+ id
+			+ ' data-toggle="tooltip" title="Delete User"><i class="fa fa-trash fa-sm" style="color:white"></i></button>'
+
+};
 
 var editUser = function(cell, formatterParams) {
 	var id = cell.getRow().getData(0)[0].toString();
@@ -141,17 +141,17 @@ function getUsersTabulator() {
 					}
 				},
 				
-//				{
-//					formatter : deleteUser,
-//					align : "center",
-//					width : 51,
-//					headerSort : false,
-//					cellClick : function(e, cell) {
-//						var id = cell.getRow().getData(0)[0].toString();
-//						$(".modal-footer #username_id").val(id);
-//
-//					}
-//				},
+				{
+					formatter : deleteUser,
+					align : "center",
+					width : 51,
+					headerSort : false,
+					cellClick : function(e, cell) {
+						var id = cell.getRow().getData(0)[0].toString();
+						$(".modal-footer #username_id").val(id);
+
+					}
+				},
 
 				{
 					formatter : editUser,

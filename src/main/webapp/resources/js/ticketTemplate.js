@@ -196,7 +196,7 @@ $(document).ready(function() {
 										</div>
 									</div>
 									<button id="validate_ticket" class="btn btn-sm btn-success" hidden>Valider</button>
-									<button id="edit-${ticket[0]}" class="btn btn-sm btn-info " data-toggle="modal" data-target="#updateIssue"><i class="fa fa-edit" style="pointer-events: none;"></i>Edit</button>
+									<button id="edit-${ticket[0]}" class="btn btn-sm btn-info " data-toggle="modal" data-target="#updateIssue" hidden><i class="fa fa-edit" style="pointer-events: none;"></i>Edit</button>
 									<form action="/Helpdesk/DownloadAttachment" method="GET">
 									<input type="text" name="path" id="path-${ticket[0]}"
 														value="${ticket[7]}" hidden/>
@@ -215,18 +215,16 @@ $(document).ready(function() {
 			    	if (ticket[3]!=="fermer") {
 			    		$("#planif-"+ticket[0]+"").removeAttr("hidden");
 			    				
-					}			    	
-			    	
+					}			    		    	
 			    	
 				}
 			    
-			    if (ticket[3]==="fermer") {
-		    		$("#responseBtn-"+ticket[0]+"").hide();
-		    		$("#responseHistory-"+ticket[0]+"").removeAttr("hidden");
-			
-				}	
+			    if (($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===ticket[8]) && ticket[3]!=="fermer") {
+
+			    	$("#edit-"+ticket[0]+"").removeAttr("hidden");
+				}
 			    
-	   
+	
 				switch (ticket[4]) {
 				case "Critique":
 					
@@ -255,7 +253,8 @@ $(document).ready(function() {
 				else if(ticket[3]=="fermer") {
 					nbr_ticket_closed++;
 					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-danger");
-					$("#edit-"+ticket[0]+"").attr("hidden", true);
+					$("#responseBtn-"+ticket[0]+"").hide();
+		    		$("#responseHistory-"+ticket[0]+"").removeAttr("hidden");
 					
 				}else {
 					nbr_ticket_assign++;
@@ -653,15 +652,7 @@ $(document).ready(function() {
 		
 	}
 	
-	
-	
-	
-//	function successCallBack(data) {
-//		console.log("inside CallBack");
-//		$("#semiTransparentDiv").hide();
-//		getTickets(data);
-//	}
-	
+
 	function RefreshPage() {
 		$('.ticket_list div').hide();
 		showLoader();
@@ -692,11 +683,7 @@ $(document).ready(function() {
 
 	
 	// /******** Check UserPermission ***************///
-//	if($("#userPermission").val() !=1){
-//		$("#back").hide();
-//		$(".d-flex").removeClass("justify-content-between");
-//		$(".d-flex").addClass("justify-content-end");	
-//	}
+
 	if ($("#userPermission").val()==1) {
 		tabsToAdd=`<li class="active open"><a href="panneauAdmin_new.jsp"><i
 		class="zmdi zmdi-home"></i><span>Tableau de Bord</span></a></li>		

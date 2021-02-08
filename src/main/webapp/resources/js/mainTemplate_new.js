@@ -51,7 +51,7 @@
 		
 		var editTicket = function(cell, formatterParams) {
 			var id = cell.getRow().getData(0)[0].toString();
-			if (cell.getRow().getData(0)[3].toString()!=="fermer") {
+			if (($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===cell.getRow().getData(0)[8]) && cell.getRow().getData(0)[3].toString()!=="fermer") {
 			return '<button id='
 					+ id
 					+ ' class=" open_modal btn btn-success btn-sm" data-toggle="modal" data-target="#updateIssueOfTableView" data-id='

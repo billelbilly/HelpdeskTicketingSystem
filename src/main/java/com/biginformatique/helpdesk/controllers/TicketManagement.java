@@ -593,9 +593,11 @@ public class TicketManagement extends HttpServlet {
 		String ticketId = request.getParameter("ticket_id");
 		Part part = request.getPart("attachment");
 		User user = null;
+		User userCloser = null;
 		MailingAttachSettings mailingAttachSettings = null;
 
 		Ticket ticket = new Ticket(etatTicket);
+		ticket.setTicket_id(Integer.parseInt(ticketId));
 		ticket.setObjet(Objet);
 		ticket.setSeverity(Severity);
 		ticket.setDetails(Details);
@@ -625,16 +627,15 @@ public class TicketManagement extends HttpServlet {
 		// if etatTicket is fermer get the user who closed the ticket and add it to the
 		// ticket object
 		user = userDao.getUserById(ticketCreator.getUser().getUser_id());
-		ticket.setTicket_id(Integer.parseInt(ticketId));
+		userCloser=userDao.getUserByUsername(userSession);
 		ticket.setUser(user);
 		if (etatTicket.equals("fermer")) {
-			ticket.setClosedBy(userSession);
+			ticket.setClosedBy(userCloser.getLastName());
 		}
 
 		ticketDao.updateTicketDao(ticket);
 		JSONObject jo = new JSONObject();
 		jo.put("success", "true");
-
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(jo.toString());

@@ -35,8 +35,8 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/css/ResetPassword.css">
 
-<link rel="stylesheet" type="text/css"
-	href="resources/css/bootstrap-datetimepicker.min.css">
+<!-- <link rel="stylesheet" type="text/css" -->
+<!-- 	href="resources/css/bootstrap-datetimepicker.min.css"> -->
 
 
 <style type="text/css">
