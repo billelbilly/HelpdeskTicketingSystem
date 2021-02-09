@@ -182,7 +182,7 @@
 							
 						}else {
 							nbr_assign++;
-							ticket[3]="assigné";
+						
 						}
 						
 						
@@ -244,6 +244,9 @@
 						
 						var ticket_info;
 						var creationDate=getFormattedDate(cell.getRow().getData(0)[5].toString());
+						var ticketCreator=cell.getRow().getData(0)[15].toString()+"."+cell.getRow().getData(0)[8].toString();
+						var logiciel=cell.getRow().getData(0)[9].toString();
+						var version=cell.getRow().getData(0)[10].toString();
 					
 						$("#Details").modal("show");
 					   // Clear closing_info div from any paragraph first
@@ -251,22 +254,24 @@
 						if (cell.getRow().getData(0)[3].toString()=="fermer") {
 							
 							var closingDate=getFormattedDate(cell.getRow().getData(0)[13].toString());
-							ticket_info=`<p>créé par: <strong>@${cell.getRow().getData(0)[8].toString()}</strong>, le: <strong>${creationDate}</strong></p>
-							 <p>Fermé par: <strong>@${cell.getRow().getData(0)[12].toString()}</strong> le: <strong>${closingDate}</strong></p>
-							 <p>Logiciel & Version: <strong>${cell.getRow().getData(0)[9].toString()}, ${cell.getRow().getData(0)[10].toString()}</strong> </p>`;
+							var ticketCloser=cell.getRow().getData(0)[12].toString();
+							ticket_info=`<p>créé par: <strong>@${ticketCreator}</strong>, le: <strong>${creationDate}</strong></p>
+							 <p>Fermé par: <strong>@${ticketCloser}</strong> le: <strong>${closingDate}</strong></p>
+							 <p>Logiciel & Version: <strong>${logiciel}, ${version}</strong> </p>`;
 							$("#ticket_info").html(ticket_info);
 						}else if (cell.getRow().getData(0)[3].toString()=="créé") {
 							ticket_info=`
-								 <p>créé par: <strong>@${cell.getRow().getData(0)[8].toString()}</strong>, le: <strong>${creationDate}</strong></p>
-								 <p>Logiciel & Version: <strong>${cell.getRow().getData(0)[9].toString()}, ${cell.getRow().getData(0)[10].toString()}</strong> </p>
+								 <p>créé par: <strong>@${ticketCreator}</strong>, le: <strong>${creationDate}</strong></p>
+								 <p>Logiciel & Version: <strong>${logiciel}, ${version}</strong> </p>
 								`;
 								$("#ticket_info").html(ticket_info);
 							
 						}else {
 							var assignDate=getFormattedDate(cell.getRow().getData(0)[14].toString());
-							ticket_info=`<p>créé par: <strong>@${cell.getRow().getData(0)[8].toString()}</strong>, le: <strong>${creationDate}</strong></p>
-								 <p>Assigné à: <strong>@${cell.getRow().getData(0)[11].toString()}</strong> le: <strong>${assignDate}</strong></p>
-								 <p>Logiciel & Version: <strong>${cell.getRow().getData(0)[9].toString()}, ${cell.getRow().getData(0)[10].toString()}</strong> </p>
+							var assignedUser=cell.getRow().getData(0)[11].toString();
+							ticket_info=`<p>créé par: <strong>@${ticketCreator}</strong>, le: <strong>${creationDate}</strong></p>
+								 <p>Assigné à: <strong>@${assignedUser}</strong> le: <strong>${assignDate}</strong></p>
+								 <p>Logiciel & Version: <strong>${logiciel}, ${version}</strong> </p>
 								`;
 								$("#ticket_info").html(ticket_info);
 						}
@@ -449,7 +454,7 @@
  	 	 						var search_response=$('input.search_response').quicksearch('ul.media-list li');
  	 	 						var ticket_id = cell.getRow().getData(0)[0].toString();
  	 	 						var date=getFormattedDate(cell.getRow().getData(0)[5].toString(),"ticket");
- 	 	 						var creator=cell.getRow().getData(0)[8].toString();
+ 	 	 						var creator=cell.getRow().getData(0)[15].toString()+"."+cell.getRow().getData(0)[8].toString();
  	 	 						
  	 	 						var detail=cell.getRow().getData(0)[2].toString();
  	 	 						

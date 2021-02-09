@@ -59,8 +59,8 @@ public class PlanificationsDao {
 			} else {
 				Query query = session.createQuery(
 						"SELECT T.ticket_id, U.username, P.dateDebutPlanif, P.dateFinPlanif, P.dateDebutRealise, P.dateFinRealise,T.Etat,P.Observation FROM Planification P, Ticket T, User U, TicketUser TU "
-						+ "WHERE P.ticket=T.ticket_id AND T.ticket_id= TU.ticket_id AND T.AssignedTo= :username AND T.user=U.user_id")
-						.setParameter("username", user.getUsername());
+						+ "WHERE P.ticket=T.ticket_id AND T.ticket_id= TU.ticket_id AND T.AssignedTo= :firstNamelastName AND T.user=U.user_id")
+						.setParameter("firstNamelastName", user.getFirstName()+"."+user.getLastName());
 				listPlanifications = query.list();
 				// commit transaction
 				transaction.commit();

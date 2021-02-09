@@ -187,7 +187,7 @@ $(document).ready(function() {
 											<strong class="text-dark">${ticket[1]}</strong> <span class="${ticket[0]}" >${ticket[4]}</span><span
 												class="number pull-right"># ${ticket[0]}</span>
 											<p class="info">
-												créé par: <strong class="text-dark"> @${ticket[8]}</strong> le: ${date} <i
+												créé par: <strong class="text-dark"> @${ticket[15]+"."+ticket[8]}</strong> le: ${date} <i
 													class="fa fa-comments"></i> <a id="responseBtn-${ticket[0]}"
 													class="btn  btn-info btn-sm" href="#" role="button" data-toggle="modal"	data-target="#issue">
 													Réponses</a>
@@ -218,8 +218,10 @@ $(document).ready(function() {
 					}			    		    	
 			    	
 				}
+			    console.log("this is session: "+$("#usersession").val());
+			    console.log("this is ticket[8]: "+ticket[8]);
 			    
-			    if (($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===ticket[8]) && ticket[3]!=="fermer") {
+			    if (($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===ticket[16]) && ticket[3]!=="fermer") {
 
 			    	$("#edit-"+ticket[0]+"").removeAttr("hidden");
 				}
@@ -279,7 +281,7 @@ $(document).ready(function() {
 			
 					var ticket_detail_header=`
 					<p>
-					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[8]}</strong>
+					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[15]+"."+ticket[8]}</strong>
 					   le: ${date}
 					</p>
 				    <p>${ticket[2]}</p>	
@@ -382,7 +384,7 @@ $(document).ready(function() {
 			
 					var ticket_detail_header=`
 					<p>
-					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[8]}</strong>
+					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[15]+"."+ticket[8]}</strong>
 					   le: ${date}
 					</p>
 				    <p>${ticket[2]}</p>	

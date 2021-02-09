@@ -55,7 +55,7 @@ public class TicketDao {
 			if (user.getEtat() == 2) {
 				// if User is a Client
 				Query query = session.createQuery(
-						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.username, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime  FROM Ticket T, User U, Logiciel L, Version V WHERE T.user= :user and T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC")
+						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username  FROM Ticket T, User U, Logiciel L, Version V WHERE T.user= :user and T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC")
 						.setParameter("user", user);
 				allTickets = query.list();
 				// commit transaction
@@ -64,20 +64,20 @@ public class TicketDao {
 			} else if (user.getEtat() == 1) {
 				// if the User is Admin
 				Query query = session.createQuery(
-						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user,T.Attachment, U.username, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime  FROM Ticket T, User U, Logiciel L, Version V WHERE T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC");
+						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user,T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username FROM Ticket T, User U, Logiciel L, Version V WHERE T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC");
 				allTickets = query.list();
 				// commit transaction
 				transaction.commit();
 			} else {
 				// if User is UserEntreprise
 				Query query = session.createQuery(
-						"SELECT  T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user,T.Attachment, U.username, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime  FROM Ticket T, TicketUser TU, User U, Logiciel L, Version V"
-								+ " WHERE (T.ticket_id= TU.ticket_id AND T.AssignedTo= :lastName AND T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id) ORDER BY T.createDateTime DESC");
-				query.setParameter("lastName", user.getLastName());
+						"SELECT  T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user,T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username  FROM Ticket T, TicketUser TU, User U, Logiciel L, Version V"
+								+ " WHERE (T.ticket_id= TU.ticket_id AND T.AssignedTo= :firstNamelastName AND T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id) ORDER BY T.createDateTime DESC");
+				query.setParameter("firstNamelastName", user.getFirstName()+"."+user.getLastName());
 				assignedTickets = query.list();
 
 				query = session.createQuery(
-						"SELECT  T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user,T.Attachment, U.username, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime  FROM Ticket T, User U, Logiciel L, Version V"
+						"SELECT  T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user,T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username  FROM Ticket T, User U, Logiciel L, Version V"
 								+ " WHERE T.user= :user and T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC");
 				query.setParameter("user", user);
 				currentUserTickets = query.list();
@@ -116,7 +116,7 @@ public class TicketDao {
 			transaction = session.beginTransaction();
 
 			Query query = session.createQuery(
-					"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime,T.AssignedTo,T.ClosedBy,U.lastName,T.closedDateTime,T.assignedDateTime, L.nomLogiciel, V.nomVersion FROM Ticket T, User U, Logiciel L, Version V WHERE T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC");
+					"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime,T.AssignedTo,T.ClosedBy,U.lastName,T.closedDateTime,T.assignedDateTime, L.nomLogiciel, V.nomVersion,U.firstName FROM Ticket T, User U, Logiciel L, Version V WHERE T.user=U.user_id AND L.logiciel_id=T.Logiciel AND T.Version=V.version_id ORDER BY T.createDateTime DESC");
 			allTickets = query.list();
 			// commit transaction
 			transaction.commit();
@@ -216,7 +216,7 @@ public class TicketDao {
 
 			if (user.getEtat() == 1) {
 				Query query = session.createQuery(
-						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.username FROM Ticket T, User U WHERE T.Etat= :filtre and T.user=U.user_id ORDER BY T.createDateTime DESC");
+						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username FROM Ticket T, User U, Logiciel L, Version V WHERE T.Etat= :filtre and T.user=U.user_id ORDER BY T.createDateTime DESC");
 				query.setParameter("filtre", filtre);
 				filtreTickets = query.list();
 				// commit transaction
@@ -224,7 +224,7 @@ public class TicketDao {
 
 			} else if (user.getEtat() == 2) {
 				Query query = session.createQuery(
-						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.username FROM Ticket T, User U WHERE T.Etat= :filtre and T.user= :user and T.user=U.user_id ORDER BY T.createDateTime DESC");
+						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username FROM Ticket T, User U, Logiciel L, Version V WHERE T.Etat= :filtre and T.user= :user and T.user=U.user_id ORDER BY T.createDateTime DESC");
 				query.setParameter("filtre", filtre);
 				query.setParameter("user", user);
 				filtreTickets = query.list();
@@ -234,14 +234,14 @@ public class TicketDao {
 			} else {
 
 				Query query = session.createQuery(
-						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.username FROM Ticket T, TicketUser TU, User U"
-								+ " WHERE (T.Etat= :filtre AND T.ticket_id= TU.ticket_id AND T.AssignedTo= :lastName AND T.user=U.user_id ) ORDER BY T.createDateTime DESC");
-				query.setParameter("lastName", user.getLastName());
+						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username FROM Ticket T, TicketUser TU, User U, Logiciel L, Version V"
+								+ " WHERE (T.Etat= :filtre AND T.ticket_id= TU.ticket_id AND T.AssignedTo= :firstNamelastName AND T.user=U.user_id ) ORDER BY T.createDateTime DESC");
+				query.setParameter("firstNamelastName", user.getFirstName()+"."+user.getLastName());
 				query.setParameter("filtre", filtre);
 				List assignedTickets = query.list();
 
 				query = session.createQuery(
-						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.username FROM Ticket T, User U"
+						"SELECT T.id, T.Objet, T.Details, T.Etat,T.Severity, T.createDateTime, T.user, T.Attachment, U.lastName, L.nomLogiciel, V.nomVersion,T.AssignedTo,T.ClosedBy,T.closedDateTime,T.assignedDateTime, U.firstName, U.username FROM Ticket T, User U, Logiciel L, Version V"
 								+ " WHERE T.Etat= :filtre AND T.user= :user AND T.user=U.user_id ORDER BY T.createDateTime DESC");
 				query.setParameter("user", user);
 				query.setParameter("filtre", filtre);
@@ -383,10 +383,10 @@ public class TicketDao {
 			transaction = session.beginTransaction();
 
 			Query query = session.createQuery(
-					"SELECT T.id FROM Ticket T WHERE (T.assignedDateTime > :lastAccessDate AND T.AssignedTo= :username) OR (T.assignedDateTime > :currentAccessDate AND T.AssignedTo= :username)").
+					"SELECT T.id FROM Ticket T WHERE (T.assignedDateTime > :lastAccessDate AND T.AssignedTo= :firstNamelastName) OR (T.assignedDateTime > :currentAccessDate AND T.AssignedTo= :firstNamelastName)").
 					setParameter("lastAccessDate", user.getLastAccessDate()).
 					setParameter("currentAccessDate", user.getCurrentAccessDate()).
-					setParameter("username", user.getUsername());
+					setParameter("firstNamelastName", user.getFirstName()+"."+user.getLastName());
 			assignedTickets = query.list();
 			// commit transaction
 			transaction.commit();

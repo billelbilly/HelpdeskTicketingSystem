@@ -126,7 +126,7 @@ public class TicketManagement extends HttpServlet {
 			}
 
 			break;
-			
+
 		case "/getCreatedTickets":
 			try {
 				getCreatedTickets(request, response);
@@ -136,7 +136,7 @@ public class TicketManagement extends HttpServlet {
 			}
 
 			break;
-			
+
 		case "/getResponsesOnTickets":
 			try {
 				getResponsesOnTickets(request, response);
@@ -146,7 +146,7 @@ public class TicketManagement extends HttpServlet {
 			}
 
 			break;
-			
+
 		case "/getAssign&Responses":
 			try {
 				getAssignResponses(request, response);
@@ -175,7 +175,7 @@ public class TicketManagement extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(jo.toString());
-		
+
 	}
 
 	private void getResponsesOnTickets(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -190,7 +190,7 @@ public class TicketManagement extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(jo.toString());
-		
+
 	}
 
 	private void getCreatedTickets(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -205,7 +205,7 @@ public class TicketManagement extends HttpServlet {
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(jo.toString());
-		
+
 	}
 
 	private void getPlanificationByTicket(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -595,6 +595,16 @@ public class TicketManagement extends HttpServlet {
 		User user = null;
 		User userCloser = null;
 		MailingAttachSettings mailingAttachSettings = null;
+		MailingAttachSettings settings = null;
+		// reads SMTP server setting from DB
+		settings = settingsDao.getInitialSettingsDao();
+		host = settings.getHost();
+		smtp = settings.getSmtp();
+		port = settings.getPort();
+		email = settings.getEmail();
+		name = settings.getNom();
+		pass = settings.getPassword();
+		pass = decryptPassword.decrypt(pass);
 
 		Ticket ticket = new Ticket(etatTicket);
 		ticket.setTicket_id(Integer.parseInt(ticketId));
@@ -627,10 +637,22 @@ public class TicketManagement extends HttpServlet {
 		// if etatTicket is fermer get the user who closed the ticket and add it to the
 		// ticket object
 		user = userDao.getUserById(ticketCreator.getUser().getUser_id());
-		userCloser=userDao.getUserByUsername(userSession);
+		userCloser = userDao.getUserByUsername(userSession);
 		ticket.setUser(user);
 		if (etatTicket.equals("fermer")) {
-			ticket.setClosedBy(userCloser.getLastName());
+			ticket.setClosedBy(userCloser.getFirstName() + "." + userCloser.getLastName());
+			String recipient= ticketCreator.getUser().getEmail();
+			String subject = "Tiquet Fermé";
+			// Add more info to the content such Ticket number software in question ...
+			String content = "Bonjour,<br><br>Votre Tiquet Numéro: #" + ticketId + " a été fermé.";
+			content += "<br><br>Cordialement.";
+			// Send Email Notification here
+			try {
+				EmailUtility.sendEmail(smtp, port, email, name, pass, recipient, subject, content);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
 		}
 
 		ticketDao.updateTicketDao(ticket);

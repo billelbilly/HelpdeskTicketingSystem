@@ -161,6 +161,21 @@ function getUsersTabulator() {
 					cellClick : function(e, cell) {
 						$("#password_id").val('');
 						$("#password2_id").val('');
+						var userTypeis=cell.getRow().getData(0)[6].toString();
+						if (userTypeis==="1" || userTypeis==="3") {
+							$("#prenom_id").attr("required",true);
+						
+							
+						} else {
+							
+							var isHidden = document.getElementById("prenom_id")
+							.hasAttribute("required");
+							
+							if (isHidden) {
+								$("#prenom_id").removeAttr("required");
+								
+							}
+						}
 						var phone_id="";
 						var dateExpiration="";
 						var user_id = cell.getRow().getData(0)[0].toString();
@@ -509,7 +524,29 @@ $("#userTypeRegister_id").on("change",function(){
 		if (isHidden) {
 		$("#date_expiration_compte").removeAttr("required");		
 	}
+		
+		
 		$("#date_expiration_compte_Register").hide();
+	}
+	var isHidden = document.getElementById("prenomRegister_id")
+	.hasAttribute("required");
+
+	
+	if (userType==1 || userType==3) {
+		
+		if (!isHidden) {
+		$("#prenomRegister_id").attr("required",true);
+	
+		}
+		
+	}
+	else {
+		
+		if (isHidden) {
+		$("#prenomRegister_id").removeAttr("required");
+
+	}
+		
 	}
 	
 })
