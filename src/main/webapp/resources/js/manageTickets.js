@@ -93,6 +93,7 @@ function getUsersEntreprise() {
 	});
 
 }
+
 function getTicketsTabulator() {
 	// create Tabulator on DOM element with id "example-table"
 	var table = new Tabulator("#ticketList", {

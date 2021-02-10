@@ -24,7 +24,7 @@ $(document).ready(function () {
 				
 				switch (data.user_type) {
 				case "0":
-					flash('Compte expiré Veuillez contactez votre administrateur !', {
+					flash('Support expiré Veuillez contactez votre administrateur pour le renouveler !', {
 
 						// background color
 						'bgColor': 'blue',
@@ -49,7 +49,7 @@ $(document).ready(function () {
 						'autohide': true,
 
 						// timout
-						'duration': 4000
+						'duration': 8000
 
 					});
 					

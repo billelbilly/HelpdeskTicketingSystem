@@ -14,6 +14,7 @@ import com.biginformatique.helpdesk.models.LogicielVersion;
 import com.biginformatique.helpdesk.models.MailingAttachSettings;
 import com.biginformatique.helpdesk.models.Planification;
 import com.biginformatique.helpdesk.models.Response;
+import com.biginformatique.helpdesk.models.Structure;
 import com.biginformatique.helpdesk.models.Ticket;
 import com.biginformatique.helpdesk.models.TicketUser;
 import com.biginformatique.helpdesk.models.User;
@@ -60,6 +61,7 @@ public class HibernateUtil {
 				configuration.addAnnotatedClass(Logiciel.class);
 				configuration.addAnnotatedClass(Version.class);
 				configuration.addAnnotatedClass(LogicielVersion.class);
+				configuration.addAnnotatedClass(Structure.class);
 
 				ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
 						.applySettings(configuration.getProperties()).build();

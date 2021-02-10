@@ -15,17 +15,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.biginformatique.helpdesk.dao.SettingsDao;
 import com.biginformatique.helpdesk.dao.UserDao;
 import com.biginformatique.helpdesk.models.User;
 import com.google.gson.Gson;
 
 import top.jfunc.json.impl.JSONObject;
 
-
 @WebServlet("/UserManagement")
 public class UserManagement extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserDao userDao;
+	private SettingsDao settingsDao;
 
 	public UserManagement() {
 		super();
@@ -34,6 +35,7 @@ public class UserManagement extends HttpServlet {
 
 	public void init(ServletConfig config) throws ServletException {
 		userDao = new UserDao();
+		settingsDao = new SettingsDao();
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -68,7 +70,7 @@ public class UserManagement extends HttpServlet {
 			break;
 		case "/DeleteUser":
 			try {
-				deleteUser(request,response);
+				deleteUser(request, response);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -154,7 +156,7 @@ public class UserManagement extends HttpServlet {
 		}
 
 	}
-	
+
 	private void register(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		String firstName = request.getParameter("firstName");
@@ -164,11 +166,12 @@ public class UserManagement extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		String typeUser = request.getParameter("userType");
+		String structureId = request.getParameter("structure");
 		String sdateExpiration = request.getParameter("date_expiration_compte");
 		int user_email[] = new int[2];
 		LocalDate dateExpiration = null;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		if (sdateExpiration!="") {
+		if (sdateExpiration != "") {
 			dateExpiration = LocalDate.parse(sdateExpiration, formatter);
 //			  try {
 //				dateExpiration=new SimpleDateFormat("dd/MM/yyyy").parse(sdateExpiration);
@@ -176,9 +179,8 @@ public class UserManagement extends HttpServlet {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}  
-			
+
 		}
-		
 
 		User user = new User(Integer.parseInt(typeUser));
 		user.setFirstName(firstName);
@@ -188,16 +190,19 @@ public class UserManagement extends HttpServlet {
 		user.setUsername(username);
 		user.setDateExpiration(dateExpiration);
 		user.setPassword(userDao.hash(password));
+		if (typeUser.equals("2") || typeUser.equals("3")) {
+			user.setStructure(settingsDao.getStructureById(Integer.parseInt(structureId)));
+
+		}
 
 		user_email = (int[]) userDao.getUser(user);
-		if (user_email[0]== 0 && user_email[1]==0) {
+		if (user_email[0] == 0 && user_email[1] == 0) {
 			userDao.saveUser(user);
 			response.setContentType("text/plain");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write("usersaved");
 
-		}
-		else {
+		} else {
 			if (user_email[0] == 1) {
 				response.setContentType("text/plain");
 				response.setCharacterEncoding("UTF-8");
@@ -208,31 +213,29 @@ public class UserManagement extends HttpServlet {
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write("emailexist");
 			}
-			
+
 		}
 
 	}
-	
+
 	private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		JSONObject jo = new JSONObject();
-		String user_id=request.getParameter("username_id");
-		if(userDao.deleteUserDao(user_id)) {
-		    jo.put("success", "true");
+		String user_id = request.getParameter("username_id");
+		if (userDao.deleteUserDao(user_id)) {
+			jo.put("success", "true");
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(jo.toString());		
-		}else {
+			response.getWriter().write(jo.toString());
+		} else {
 			jo.put("success", "false");
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write(jo.toString());		
-			
+			response.getWriter().write(jo.toString());
+
 		}
-			
-		
-		
+
 	}
-	
+
 	private void editUser(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String userId = request.getParameter("usernameId");
 		String firstName = request.getParameter("firstName");
@@ -244,9 +247,9 @@ public class UserManagement extends HttpServlet {
 		String password = request.getParameter("password");
 		String sdateExpiration = request.getParameter("date_expiration_compte");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate dateExpiration=null;
+		LocalDate dateExpiration = null;
 		// Test here if Date Strings are not null
-		if (sdateExpiration!="") {
+		if (sdateExpiration != "") {
 			dateExpiration = LocalDate.parse(sdateExpiration, formatter);
 //			  try {
 //				dateExpiration=new SimpleDateFormat("dd/MM/yyyy").parse(sdateExpiration);
@@ -254,9 +257,9 @@ public class UserManagement extends HttpServlet {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}  
-			
+
 		}
-		User user=new User();
+		User user = new User();
 		int user_email[] = new int[2];
 //		switch (typeUser) {
 //		case "1":// admin
@@ -283,18 +286,17 @@ public class UserManagement extends HttpServlet {
 		user.setPhone(phone);
 		user.setUsername(username);
 		user.setDateExpiration(dateExpiration);
-		if(!password.equals("")) {
+		if (!password.equals("")) {
 			user.setPassword(userDao.hash(password));
 		}
 		user_email = (int[]) userDao.getUserToEdit(user);
-		if (user_email[0]== 0 && user_email[1]==0) {
+		if (user_email[0] == 0 && user_email[1] == 0) {
 			userDao.editUserDao(user);
 			response.setContentType("text/plain");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write("userupdated");
 
-		}
-		else {
+		} else {
 			if (user_email[0] == 1) {
 				response.setContentType("text/plain");
 				response.setCharacterEncoding("UTF-8");
@@ -305,9 +307,8 @@ public class UserManagement extends HttpServlet {
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write("emailexist");
 			}
-			
+
 		}
-	
 
 	}
 

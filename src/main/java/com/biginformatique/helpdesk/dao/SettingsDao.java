@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import com.biginformatique.helpdesk.models.Logiciel;
 import com.biginformatique.helpdesk.models.LogicielVersion;
 import com.biginformatique.helpdesk.models.MailingAttachSettings;
+import com.biginformatique.helpdesk.models.Structure;
 import com.biginformatique.helpdesk.models.User;
 import com.biginformatique.helpdesk.models.Version;
 import com.biginformatique.helpdesk.util.HibernateUtil;
@@ -322,6 +323,75 @@ public class SettingsDao {
 			session.close();
 		}
 		return listVersion;
+
+	}
+
+	public boolean structureDao(Structure structure) {
+		
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		EntityManager em = session.getEntityManagerFactory().createEntityManager();
+		boolean saved = false;
+		try {
+			em.getTransaction().begin();
+			em.persist(structure);
+			em.getTransaction().commit();
+			saved = true;
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return saved;
+	}
+
+	public List StructureListDao() {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		List StructureList = null;
+
+		try {
+
+			// start a transaction
+			transaction = session.beginTransaction();
+			// get an user object
+			Query query = session.createQuery("SELECT S.structure_id, S.nomStructure FROM Structure S");
+			StructureList = query.list();
+
+			// commit transaction
+			transaction.commit();
+
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+
+		return StructureList;
+	}
+	
+	public Structure getStructureById(int structureId) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		Structure structure = null;
+		try {
+			// start a transaction
+			transaction = session.beginTransaction();
+
+			structure = (Structure) session.get(Structure.class, structureId);
+
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return structure;
 
 	}
 

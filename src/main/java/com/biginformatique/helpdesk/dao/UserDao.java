@@ -56,8 +56,8 @@ public class UserDao {
 
 					LocalDate currentDate = LocalDate.now();
 					int resultComparaison = currentDate.compareTo(dateExpiration);
-					if (resultComparaison > 0) {
-						// date expiration
+					if (resultComparaison >= 0) {
+						// Expired Date
 						return 0;
 					} else {
 						return user.getEtat();
@@ -94,7 +94,9 @@ public class UserDao {
 			transaction = session.beginTransaction();
 			// get an user object
 			Query query = session.createQuery(
-					"SELECT U.id, U.firstName, U.lastName, U.Email,U.Phone, U.username,U.Etat,U.dateExpiration FROM User U ");
+					"SELECT U.id, U.firstName, U.lastName, U.Email,U.Phone, U.username,U.Etat,U.dateExpiration,CASE "
+					+ "WHEN U.structure IS NULL THEN '' ELSE S.nomStructure END AS nomStructure FROM User U, Structure S "
+					+ "WHERE U.structure=S.structure_id OR  U.structure IS NULL");
 			allUsers = query.list();
 
 			// commit transaction
@@ -492,7 +494,7 @@ public class UserDao {
 			default:
 				break;
 			}
-			
+
 			userToUpdate = em.merge(userToUpdate);
 
 			if (userToUpdate != null) {

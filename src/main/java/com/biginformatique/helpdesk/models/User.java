@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -86,21 +87,15 @@ public class User implements Serializable {
     private List<Response> responses;
     
     
-    // Assign To logic
-//    @OneToOne(mappedBy = "userAssigned")
-//    private Ticket ticketAssigned;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "structure_id")
+    private Structure structure;
 
 	public int getId() {
 		return user_id;
 	}
 
-//	public Ticket getTicketAssigned() {
-//		return ticketAssigned;
-//	}
-//
-//	public void setTicketAssigned(Ticket ticketAssigned) {
-//		this.ticketAssigned = ticketAssigned;
-//	}
+
 
 	public void setId(int id) {
 		this.user_id = id;
@@ -193,6 +188,16 @@ public class User implements Serializable {
 	public void setCurrentAccessDate(LocalDateTime currentAccessDate) {
 		this.currentAccessDate = currentAccessDate;
 	}
+
+	public Structure getStructure() {
+		return structure;
+	}
+
+	public void setStructure(Structure structure) {
+		this.structure = structure;
+	}
+	
+	
 	
 	
 }

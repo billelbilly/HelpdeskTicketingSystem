@@ -34,6 +34,46 @@ function getFormattedDate(datetoformat) {
 	return str;
 }
 
+//Function to get list of Users Entreprise
+function getStructure() {
+
+	$.ajax({
+		type : "GET",
+		url : "/Helpdesk/Settings",
+		data : {
+			action : "/getStructureList"
+		},
+		// processData: false,
+		// contentType: "text",
+		dataType : "json",
+		success : function(data) {
+
+			$('#structure').empty();
+			$('#structureEdit_id').empty();
+
+			for (var i = 0; i < data.length; i++) {
+		
+				$('#structure').append(
+						'<option value="' + data[i][0] + '">' + data[i][1]
+								+ '</option>');
+				$('#structureEdit_id').append(
+						'<option value="' + data[i][0] + '">' + data[i][1]
+								+ '</option>');
+
+			}
+
+			// Initialize select2
+			$("#structure").select2();
+			$("#structureEdit_id").select2();
+
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("Erreur Serveur Contactez Votre Administrateur");
+		},
+	});
+
+}
+
 function getUsersTabulator() {
 	// create Tabulator on DOM element with id "example-table"
 	var table = new Tabulator("#usersList", {
@@ -140,6 +180,12 @@ function getUsersTabulator() {
 						invalidPlaceholder : "",
 					}
 				},
+				{
+					title : "Structure",
+					field : "8",
+					headerFilter : true,
+					headerFilterPlaceholder : "Recherche",
+				},
 				
 				{
 					formatter : deleteUser,
@@ -162,6 +208,7 @@ function getUsersTabulator() {
 						$("#password_id").val('');
 						$("#password2_id").val('');
 						var userTypeis=cell.getRow().getData(0)[6].toString();
+						getStructure();
 						if (userTypeis==="1" || userTypeis==="3") {
 							$("#prenom_id").attr("required",true);
 						
@@ -511,8 +558,10 @@ $("#gestionUtilisateur").on("click",function(){
 // Hide or Show Expiration field depending on user Type
 $("#date_expiration_compte_Register").hide();
 $("#date_expiration_compte_Edit").hide();
+$("#structureRegister").hide();
 $("#userTypeRegister_id").on("change",function(){
 	var userType=$("#userTypeRegister_id").val();
+	
 	
 	if (userType==2) {
 		$("#date_expiration_compte_Register").show();
@@ -530,7 +579,6 @@ $("#userTypeRegister_id").on("change",function(){
 	}
 	var isHidden = document.getElementById("prenomRegister_id")
 	.hasAttribute("required");
-
 	
 	if (userType==1 || userType==3) {
 		
@@ -548,6 +596,15 @@ $("#userTypeRegister_id").on("change",function(){
 	}
 		
 	}
+	
+	if (userType==2 || userType==3) {
+		$("#structureRegister").show();
+		getStructure();
+		
+	}else {
+		$("#structureRegister").hide();
+	}
+	
 	
 })
 

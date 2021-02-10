@@ -82,6 +82,10 @@ div.progress {
 	z-index: 9999 !important; /* has to be larger than 1050 */
 }
 
+#structureEdit {
+	z-index: 9999 !important; /* has to be larger than 1050 */
+}
+
 #userListModal .modal-lg {
 	max-width: 80%;
 	max-height: 80%;

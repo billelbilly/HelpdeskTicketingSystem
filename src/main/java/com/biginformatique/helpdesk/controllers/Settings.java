@@ -11,12 +11,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.biginformatique.helpdesk.dao.SettingsDao;
 import com.biginformatique.helpdesk.dao.UserDao;
 import com.biginformatique.helpdesk.models.Logiciel;
 import com.biginformatique.helpdesk.models.MailingAttachSettings;
+import com.biginformatique.helpdesk.models.Structure;
+import com.biginformatique.helpdesk.models.User;
 import com.biginformatique.helpdesk.models.Version;
 import com.biginformatique.helpdesk.util.EncryptDecryptPassword;
+import com.biginformatique.helpdesk.util.HibernateUtil;
 import com.google.gson.Gson;
 
 import top.jfunc.json.impl.JSONObject;
@@ -74,6 +80,15 @@ public class Settings extends HttpServlet {
 				e.printStackTrace();
 			}
 			break;
+			
+		case "/getStructureList":
+			try {
+				getStructureList(request, response);
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+			break;
 
 		case "/getVersionList":
 			try {
@@ -96,6 +111,22 @@ public class Settings extends HttpServlet {
 		default:
 			break;
 		}
+	}
+
+	private void getStructureList(HttpServletRequest request, HttpServletResponse response) {
+		List StructureList = settingsDao.StructureListDao();
+		/* Send Json Response To Client */
+		String jsonStructureList = new Gson().toJson(StructureList);
+
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		try {
+			response.getWriter().write(jsonStructureList);
+		} catch (IOException e) {
+
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void getVersionListByLogiciel(HttpServletRequest request, HttpServletResponse response) {
@@ -206,9 +237,40 @@ public class Settings extends HttpServlet {
 			}
 			break;
 
+		case "/Structure":
+			try {
+				StructureSettings(request, response);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+
 		default:
 			break;
 		}
+	}
+
+	private void StructureSettings(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String nomStructure = request.getParameter("nomStructure");
+		Structure structure = new Structure();
+		JSONObject jo = new JSONObject();
+		structure.setNomStructure(nomStructure);
+		if (settingsDao.structureDao(structure)) {
+
+			jo.put("success", "true");
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(jo.toString());
+		} else {
+
+			jo.put("success", "false");
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(jo.toString());
+		}
+
+		
+
 	}
 
 	private void LogicielSettings(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -274,7 +336,8 @@ public class Settings extends HttpServlet {
 
 	}
 
-	private void EditMailAttachSettings(HttpServletRequest request, HttpServletResponse response, MailingAttachSettings settings) throws Exception {
+	private void EditMailAttachSettings(HttpServletRequest request, HttpServletResponse response,
+			MailingAttachSettings settings) throws Exception {
 		String host = request.getParameter("host");
 		String smtp = request.getParameter("smtp");
 		String port = request.getParameter("port");
@@ -326,7 +389,7 @@ public class Settings extends HttpServlet {
 		settings = settingsDao.getInitialSettingsDao();
 
 		if (settings != null) {
-			EditMailAttachSettings(request, response,settings);
+			EditMailAttachSettings(request, response, settings);
 
 		} else {
 			mailingAttachSettings.setHost(host);
@@ -355,5 +418,7 @@ public class Settings extends HttpServlet {
 		}
 
 	}
+	
+	
 
 }
