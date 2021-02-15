@@ -30,7 +30,9 @@
 											</span>
 										</div>
 										<input name="firstName" id="prenom_id" class="form-control"
-											placeholder="Prénom" type="text">
+											placeholder="Prénom" type="text"
+											oninvalid="this.setCustomValidity('Prénom obligatoire !')"
+											oninput="setCustomValidity('')">
 									</div>
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
@@ -38,11 +40,13 @@
 											</span>
 										</div>
 										<input name="lastName" id="nom_id" class="form-control"
-											placeholder="Nom" type="text">
+											placeholder="Nom Client/Utilisateur" type="text"
+											oninvalid="this.setCustomValidity('Nom obligatoire !')"
+											oninput="setCustomValidity('')" required>
 									</div>
 									<!-- form-group// -->
-									<div id="emailAlertEditUser" class="alert alert-danger" role="alert"
-										hidden></div>
+									<div id="emailAlertEditUser" class="alert alert-danger"
+										role="alert" hidden></div>
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i
@@ -50,7 +54,8 @@
 											</span>
 										</div>
 										<input name="email" id="email_id" class="form-control"
-											placeholder="addresse Email" type="email" oninvalid="this.setCustomValidity('Email obligatoire !')"
+											placeholder="addresse Email" type="email"
+											oninvalid="this.setCustomValidity('Email obligatoire !')"
 											oninput="setCustomValidity('')" required="required">
 									</div>
 									<!-- form-group// -->
@@ -63,15 +68,16 @@
 										<input name="phone" id="phone_id" class="form-control"
 											placeholder="Téléphone" type="text">
 									</div>
-									<div id="usernameAlertEditUser" class="alert alert-danger" role="alert"
-										hidden></div>
+									<div id="usernameAlertEditUser" class="alert alert-danger"
+										role="alert" hidden></div>
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i class="fa fa-user"></i>
 											</span>
 										</div>
 										<input name="username" id="username_id" class="form-control"
-											placeholder="Username" type="text" oninvalid="this.setCustomValidity('Username obligatoire !')"
+											placeholder="Username" type="text"
+											oninvalid="this.setCustomValidity('Username obligatoire !')"
 											oninput="setCustomValidity('')" required="required">
 									</div>
 
@@ -93,8 +99,20 @@
 										<input name="password2" id="password2_id" class="form-control"
 											placeholder="Confirmer password" type="password">
 									</div>
-									
-									<div id="date_expiration_compte_Edit" class="form-group input-group">
+									<!-- Structure Edit -->
+									<div id="structureEdit" class="form-group input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">Structure</span>
+										</div>
+										<select name="structure" id="structureEdit_id" style='width: 150px;'
+										oninvalid="this.setCustomValidity('Ajoutez des Structure D\'abord !')"
+										oninput="setCustomValidity('')">
+											
+										</select>
+									</div>
+
+									<div id="date_expiration_compte_Edit"
+										class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i
 												class="fa fa-calendar" aria-hidden="true"></i>
@@ -103,7 +121,9 @@
 										<input type="text" class="form-control"
 											id="date_expiration_compte_EditUser"
 											name="date_expiration_compte"
-											placeholder="Date Expération du Compte">
+											placeholder="Date Expération du Compte"
+											oninvalid="this.setCustomValidity('Date Expiration obligatoire !')"
+											oninput="setCustomValidity('')">
 
 									</div>
 									<!-- form-group// -->
@@ -179,7 +199,9 @@
 											</span>
 										</div>
 										<input name="firstName" id="prenomRegister_id"
-											class="form-control" placeholder="Prénom" type="text">
+											class="form-control" placeholder="Prénom" type="text"
+											oninvalid="this.setCustomValidity('Prénom obligatoire !')"
+											oninput="setCustomValidity('')">
 									</div>
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
@@ -187,7 +209,10 @@
 											</span>
 										</div>
 										<input name="lastName" id="nomRegister_id"
-											class="form-control" placeholder="Nom" type="text">
+											class="form-control" placeholder="Nom Client/Utilisateur"
+											type="text"
+											oninvalid="this.setCustomValidity('Nom obligatoire !')"
+											oninput="setCustomValidity('')" required>
 									</div>
 									<!-- form-group// -->
 									<div id="emailAlert" class="alert alert-danger" role="alert"
@@ -237,7 +262,8 @@
 										</div>
 										<input name="password" id="passwordRegister_id"
 											class="form-control" placeholder="Password" type="password"
-											required>
+											oninvalid="this.setCustomValidity('Password obligatoire !')"
+											oninput="setCustomValidity('')" required>
 									</div>
 									<!-- form-group// -->
 									<div class="form-group input-group">
@@ -250,7 +276,7 @@
 											type="password" required>
 									</div>
 									<!-- form-group// -->
-									
+
 									<div class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text">Type</span>
@@ -261,8 +287,19 @@
 											<option value="3">User Entreprise</option>
 										</select>
 									</div>
+									<div id="structureRegister" class="form-group input-group">
+										<div class="input-group-prepend">
+											<span class="input-group-text">Structure</span>
+										</div>
+										<select name="structure" id="structure" style='width: 150px;'
+										oninvalid="this.setCustomValidity('Ajoutez des Structure D\'abord !')"
+										oninput="setCustomValidity('')">
+											
+										</select>
+									</div>
 									<!-- Here put Expiration DatePickers -->
-									<div id="date_expiration_compte_Register" class="form-group input-group">
+									<div id="date_expiration_compte_Register"
+										class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text"> <i
 												class="fa fa-calendar" aria-hidden="true"></i>
@@ -270,7 +307,9 @@
 										</div>
 										<input type="text" class="form-control"
 											id="date_expiration_compte" name="date_expiration_compte"
-											placeholder="Date Expiration du Compte">
+											placeholder="Date Expiration du Compte"
+											oninvalid="this.setCustomValidity('Date Expiration obligatoire !')"
+											oninput="setCustomValidity('')">
 
 									</div>
 
@@ -955,6 +994,40 @@
 							</div>
 
 							<br>
+							<!-- Third param menu -->
+							<div class="option-heading">Structures</div>
+							<div class="option-content is-hidden">
+								<!-- Alert Message -->
+								<div id="StructureAlert" role="alert" hidden></div>
+								<div class="col-md-4 mt-3">
+
+									<form id="StructureForm"
+										action="<%=request.getContextPath()%>/Settings" method="POST"
+										autocomplete="off">
+
+
+										<div class="form-group" hidden="1">
+											<input type="text" name="action" id="action"
+												value="/Structure" />
+										</div>
+										<div class="form-group">
+											<input name="nomStructure" id="nomStructure"
+												class="form-control" placeholder="Nom Structure" type="text"
+												oninvalid="this.setCustomValidity('Nom Structure obligatoire !')"
+												oninput="setCustomValidity('')" required />
+
+										</div>
+										<div class="form-group">
+
+											<button id="logicielSauv" type="submit"
+												class="btn btn-success btn-md">
+												<i class="fa fa-plus-circle"></i> Ajouter
+											</button>
+										</div>
+
+									</form>
+								</div>
+							</div>
 
 
 						</div>
@@ -1160,6 +1233,7 @@
 					<div class="form-group">
 						<div id="bigFileUpdate" class="alert alert-danger" role="alert"
 							hidden></div>
+						<div id="FileExistUpdate" class="alert alert-danger" role="alert" hidden></div>
 						<input id="fileUpdate" type="file" name="attachment">
 					</div>
 				</div>
@@ -1315,7 +1389,7 @@
 <script src="resources/assets/bundles/jvectormap.bundle.js"></script>
 <script src="resources/assets/bundles/sparkline.bundle.js"></script>
 <script src="resources/assets/bundles/c3.bundle.js"></script>
-<script src="resources/js/bootstrap-datetimepicker.min.js"></script>
+<!-- <script src="resources/js/bootstrap-datetimepicker.min.js"></script> -->
 <script src="resources/js/datepicker.js"></script>
 <script src="resources/js/datepickerForAdmin.js"></script>
 <script src="resources/assets/bundles/mainscripts.bundle.js"></script>

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.biginformatique.helpdesk.dao.SettingsDao;
 import com.biginformatique.helpdesk.dao.UserDao;
+import com.biginformatique.helpdesk.models.Structure;
 import com.biginformatique.helpdesk.models.User;
 import com.google.gson.Gson;
 
@@ -173,12 +174,7 @@ public class UserManagement extends HttpServlet {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		if (sdateExpiration != "") {
 			dateExpiration = LocalDate.parse(sdateExpiration, formatter);
-//			  try {
-//				dateExpiration=new SimpleDateFormat("dd/MM/yyyy").parse(sdateExpiration);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}  
+ 
 
 		}
 
@@ -193,6 +189,8 @@ public class UserManagement extends HttpServlet {
 		if (typeUser.equals("2") || typeUser.equals("3")) {
 			user.setStructure(settingsDao.getStructureById(Integer.parseInt(structureId)));
 
+		}else {
+			user.setStructure(null);
 		}
 
 		user_email = (int[]) userDao.getUser(user);
@@ -243,42 +241,23 @@ public class UserManagement extends HttpServlet {
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		String username = request.getParameter("username");
-//		String typeUser = request.getParameter("userType");
+		String structureId = request.getParameter("structure");
 		String password = request.getParameter("password");
 		String sdateExpiration = request.getParameter("date_expiration_compte");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 		LocalDate dateExpiration = null;
+		Structure structure = null;
+		User userType=null;
+		structure = settingsDao.getStructureById(Integer.parseInt(structureId));
+		userType=userDao.getUserById(Integer.parseInt(userId));
+
 		// Test here if Date Strings are not null
 		if (sdateExpiration != "") {
 			dateExpiration = LocalDate.parse(sdateExpiration, formatter);
-//			  try {
-//				dateExpiration=new SimpleDateFormat("dd/MM/yyyy").parse(sdateExpiration);
-//			} catch (ParseException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}  
-
 		}
 		User user = new User();
 		int user_email[] = new int[2];
-//		switch (typeUser) {
-//		case "1":// admin
-//			 user = new User(1);
-//
-//			break;
-//		case "2":// client
-//			 user = new User(2);
-//
-//			break;
-//		
-//		case "3":// utilisateur entreprise
-//			 user = new User(3);
-//
-//			break;
-//
-//		default:
-//			break;
-//		}
+
 		user.setId(Integer.parseInt(userId));
 		user.setFirstName(firstName);
 		user.setLastName(lastName);
@@ -286,6 +265,13 @@ public class UserManagement extends HttpServlet {
 		user.setPhone(phone);
 		user.setUsername(username);
 		user.setDateExpiration(dateExpiration);
+		if (userType.getEtat()!=1) {
+			user.setStructure(structure);
+		} else {
+			user.setStructure(null);
+
+		}
+		
 		if (!password.equals("")) {
 			user.setPassword(userDao.hash(password));
 		}

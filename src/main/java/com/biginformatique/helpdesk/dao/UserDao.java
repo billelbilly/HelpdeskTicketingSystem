@@ -94,7 +94,7 @@ public class UserDao {
 			transaction = session.beginTransaction();
 			// get an user object
 			Query query = session.createQuery(
-					"SELECT U.id, U.firstName, U.lastName, U.Email,U.Phone, U.username,U.Etat,U.dateExpiration,CASE "
+					"SELECT DISTINCT  U.id, U.firstName, U.lastName, U.Email,U.Phone, U.username,U.Etat,U.dateExpiration,CASE "
 					+ "WHEN U.structure IS NULL THEN '' ELSE S.nomStructure END AS nomStructure FROM User U, Structure S "
 					+ "WHERE U.structure=S.structure_id OR  U.structure IS NULL");
 			allUsers = query.list();
@@ -282,7 +282,7 @@ public class UserDao {
 			transaction = session.beginTransaction();
 			if (user.getPassword() != null) {
 
-				String updateUser = "UPDATE User U set U.firstName= :firstname, U.lastName= :lastname, U.Email= :email, U.Phone= :phone, U.password = :password, U.username= :username, U.dateExpiration= :dateExpiration WHERE id = :user_id";
+				String updateUser = "UPDATE User U set U.firstName= :firstname, U.lastName= :lastname, U.Email= :email, U.Phone= :phone, U.password = :password, U.username= :username, U.dateExpiration= :dateExpiration, U.structure= :structure WHERE id = :user_id";
 				Query query = session.createQuery(updateUser);
 				query.setParameter("user_id", user.getId());
 				query.setParameter("firstname", user.getFirstName());
@@ -291,8 +291,8 @@ public class UserDao {
 				query.setParameter("phone", user.getPhone());
 				query.setParameter("username", user.getUsername());
 				query.setParameter("password", user.getPassword());
-//				query.setParameter("etat", user.getEtat());
 				query.setParameter("dateExpiration", user.getDateExpiration());
+				query.setParameter("structure", user.getStructure());
 				int result = query.executeUpdate();
 
 				if (result != 0) {
@@ -301,7 +301,7 @@ public class UserDao {
 					return true;
 				}
 			} else {
-				String updateUser = "UPDATE User U set U.firstName= :firstname, U.lastName= :lastname, U.Email= :email, U.Phone= :phone,  U.username= :username, U.dateExpiration= :dateExpiration WHERE U.id = :user_id";
+				String updateUser = "UPDATE User U set U.firstName= :firstname, U.lastName= :lastname, U.Email= :email, U.Phone= :phone,  U.username= :username, U.dateExpiration= :dateExpiration, U.structure= :structure WHERE U.id = :user_id";
 				Query query = session.createQuery(updateUser);
 				query.setParameter("user_id", user.getId());
 				query.setParameter("firstname", user.getFirstName());
@@ -309,8 +309,8 @@ public class UserDao {
 				query.setParameter("email", user.getEmail());
 				query.setParameter("phone", user.getPhone());
 				query.setParameter("username", user.getUsername());
-//				query.setParameter("etat", user.getEtat());
 				query.setParameter("dateExpiration", user.getDateExpiration());
+				query.setParameter("structure", user.getStructure());
 				int result = query.executeUpdate();
 
 				if (result != 0) {

@@ -41,7 +41,7 @@
 
 				<form id="idForm" action="<%=request.getContextPath()%>/login"
 					class="login100-form validate-form" method="post" autocomplete="off">
-					<span class="login100-form-title"> Login Utilisateurs </span>
+					<span class="login100-form-title"> Login Utilisateur </span>
 
 					<div class="wrap-input100 validate-input"
 						data-validate="username Obligatoire">

@@ -26,6 +26,7 @@ $.ajax({
 			
 			var ids_cree=data.createdTickets;
 			var ids_response=data.responses;
+			var ids_user_entreprise_response=data.assignedTicketsResponses;
 			var ids_assign=data.assignedTickets;
 			
 			
@@ -120,16 +121,39 @@ $.ajax({
 				//get list of responses notifications of this user's entreprise tickets or reponses 
 				// of tickets assigned to this user entreprise
 				var nbr_assign=ids_assign.length;
-				//var nbr_response=ids_response.length;
+				
+				
+				if (ids_user_entreprise_response!=null) {
+					var nbr_user_entreprise_response=ids_user_entreprise_response.length;
+					if (nbr_user_entreprise_response!=0) {
+						$("#nbrNotif").text(nbr_user_entreprise_response);
+						if (!$("#set_heart").hasClass("heartbit")) {
+							$("#set_heart").addClass("heartbit");
+						}
+							
+					}
+					
+					for (var i = 0; i < ids_user_entreprise_response.length; i++) {
+						//$('#tickets_created').text("Numéro: "+""+ids_cree[i]+" ")
+						list_numero_response+="#"+ids_user_entreprise_response[i]+" ";
+
+					}
+					
+				}
 				if (nbr_assign!=0) {
 					$("#nbrNotif").text(nbr_assign);
 					$("#set_heart").addClass("heartbit");
 				}
+				
+			
 				for (var i = 0; i < ids_assign.length; i++) {
 					//$('#tickets_created').text("Numéro: "+""+ids_cree[i]+" ")
 					list_numero_assign+="#"+ids_assign[i]+" ";
 
 				}
+				
+				
+				
 				html_element=`<li>
 					           <a href="javascript:void(0);">
 										<div class="icon-circle bg-light-blue">

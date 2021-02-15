@@ -35,8 +35,8 @@
 <link rel="stylesheet" type="text/css"
 	href="resources/css/ResetPassword.css">
 
-<link rel="stylesheet" type="text/css"
-	href="resources/css/bootstrap-datetimepicker.min.css">
+<!-- <link rel="stylesheet" type="text/css" -->
+<!-- 	href="resources/css/bootstrap-datetimepicker.min.css"> -->
 
 
 <style type="text/css">
@@ -81,6 +81,9 @@ div.progress {
 #edit_user_modal {
 	z-index: 9999 !important; /* has to be larger than 1050 */
 }
+
+
+
 
 #userListModal .modal-lg {
 	max-width: 80%;

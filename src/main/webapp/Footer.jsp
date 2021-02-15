@@ -99,7 +99,7 @@
 										<input name="password2" id="password2_id" class="form-control"
 											placeholder="Confirmer password" type="password">
 									</div>
-									
+									<!-- Structure Edit -->
 									<div id="structureEdit" class="form-group input-group">
 										<div class="input-group-prepend">
 											<span class="input-group-text">Structure</span>
@@ -1233,6 +1233,7 @@
 					<div class="form-group">
 						<div id="bigFileUpdate" class="alert alert-danger" role="alert"
 							hidden></div>
+						<div id="FileExistUpdate" class="alert alert-danger" role="alert" hidden></div>
 						<input id="fileUpdate" type="file" name="attachment">
 					</div>
 				</div>

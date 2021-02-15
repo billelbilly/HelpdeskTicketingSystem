@@ -111,10 +111,23 @@ $(document).ready(function() {
 	
 	$("#file").on('change',function() {
 		Filevalidation();
+		var isHidden = document.getElementById("FileExist").hasAttribute("hidden");
+	
+    	if (!isHidden) {
+    		$("#FileExist").attr("hidden",true);
+    		$("#FileExist").hide();	
+		}
+    	
+    
 	});
 	
 	$("#fileUpdate").on('change',function() {
 		FilevalidationUpdate();
+		var isHidden = document.getElementById("FileExistUpdate").hasAttribute("hidden");
+		if (!isHidden) {
+    		$("#FileExistUpdate").attr("hidden",true);
+    		$("#FileExistUpdate").hide();	
+		}
 	});
 
 	
@@ -128,7 +141,7 @@ $(document).ready(function() {
 
 		$("#nbr_ticket_open").text("0 créés");
 		$("#nbr_ticket_assigned").text("0 Assignés");
-		$("#nbr_ticket_closed").text("0 Fermés");
+		//$("#nbr_ticket_closed").text("0 Fermés");
 		
 		///This is to clear up Ticket list And Close Creation Modal
 		$(".list-group").empty();
@@ -147,7 +160,7 @@ $(document).ready(function() {
 
 		if (isNotNull) {
 			var nbr_ticket_open=0;
-			var nbr_ticket_closed=0;
+			//var nbr_ticket_closed=0;
 			var nbr_ticket_assign=0;
 		
 			data.ticket.forEach(function(ticket) {
@@ -212,16 +225,15 @@ $(document).ready(function() {
 			
 			    if ($("#userPermission").val()==3 || $("#userPermission").val()==1) {
 			    	$("#listPlanifBtn").removeAttr("hidden");
-			    	if (ticket[3]!=="fermer") {
-			    		$("#planif-"+ticket[0]+"").removeAttr("hidden");
-			    				
-					}			    		    	
+//			    	if (ticket[3]!=="fermer") {
+//			    		$("#planif-"+ticket[0]+"").removeAttr("hidden");
+//			    				
+//					}			    		    	
 			    	
 				}
-			    console.log("this is session: "+$("#usersession").val());
-			    console.log("this is ticket[8]: "+ticket[8]);
+
 			    
-			    if (($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===ticket[16]) && ticket[3]!=="fermer") {
+			    if ($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===ticket[16]) {
 
 			    	$("#edit-"+ticket[0]+"").removeAttr("hidden");
 				}
@@ -252,13 +264,14 @@ $(document).ready(function() {
 					nbr_ticket_open++;
 					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-success");
 				}
-				else if(ticket[3]=="fermer") {
-					nbr_ticket_closed++;
-					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-danger");
-					$("#responseBtn-"+ticket[0]+"").hide();
-		    		$("#responseHistory-"+ticket[0]+"").removeAttr("hidden");
-					
-				}else {
+//				else if(ticket[3]=="fermer") {
+//					nbr_ticket_closed++;
+//					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-danger");
+//					$("#responseBtn-"+ticket[0]+"").hide();
+//		    		$("#responseHistory-"+ticket[0]+"").removeAttr("hidden");
+//					
+//				}
+				else {
 					nbr_ticket_assign++;
 					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-info");
 					
@@ -339,7 +352,7 @@ $(document).ready(function() {
 												
 													<span class="text-muted pull-right"> <small
 														class="text-muted">Réponse le: ${date_creation_response}</small>
-													</span> <strong class="text-success">  @${response[3]}</strong>
+													</span> <strong class="text-success">  @${response[3]+" "+response[4]}</strong>
 													<p>
 														${response[1]}
 														
@@ -643,7 +656,7 @@ $(document).ready(function() {
 			
 			// Set number ticket here
 			$("#nbr_ticket_open").text(nbr_ticket_open+" créés");
-			$("#nbr_ticket_closed").text(nbr_ticket_closed+" Fermés");
+			//$("#nbr_ticket_closed").text(nbr_ticket_closed+" Fermés");
 			$("#nbr_ticket_assigned").text(nbr_ticket_assign+" Assignés");
 	
 
@@ -684,7 +697,7 @@ $(document).ready(function() {
 	
 
 	
-	// /******** Check UserPermission ***************///
+	///******** Check UserPermission ***************///
 
 	if ($("#userPermission").val()==1) {
 		tabsToAdd=`<li class="active open"><a href="panneauAdmin_new.jsp"><i
@@ -693,12 +706,22 @@ $(document).ready(function() {
 				class="zmdi zmdi-account-box-mail"></i><span>Utilisateurs &
 					Contacts</span></a></li>
 		<li><a href="Statistics.jsp"><i
-				class="zmdi zmdi-chart"></i><span>Statistiques</span></a></li>`;
+				class="zmdi zmdi-chart"></i><span>Statistiques</span></a></li>
+				<li><a href="ClosedTickets.jsp"><i
+				class="zmdi zmdi zmdi-folder-star-alt"></i><span>Tiquets Fermés</span></a></li>
+				`;
 		$("ul.list").append(tabsToAdd);
 		
 		
+	}else {
+	tabsToAdd=`<li class="active open"><a href="mainTemplate_new.jsp">
+	<i class="zmdi zmdi-home"></i><span>Tableau de Bord</span></a></li>
+	<li><a href="ClosedTickets.jsp"><i
+				class="zmdi zmdi-folder-star-alt"></i><span>Tiquets Fermés</span></a></li>
+				`;
+		$("ul.list").append(tabsToAdd);
 	}
-	// /*********************************************///
+	///*********************************************///
 	
 	// /******** Filtre Tickets ***************///
 	$('#filtreTicket').change(function() {
@@ -773,7 +796,7 @@ $(document).ready(function() {
 			dataType : "json",
 			success : function(data) {
 				$("#semiTransparentDiv").hide();
-				if (data.success) {
+				if (data.success==="true") {
 					
 					RefreshPage();
 					
@@ -807,7 +830,12 @@ $(document).ready(function() {
 					});
 
 				} else {
-					alert("No Ticket Available !");
+					$("#semiTransparentDiv").hide();
+					$("#FileExist").show();
+                	$("#FileExist").removeAttr("hidden");
+                	$("#FileExist").text('Fichier existe déjà!');
+                	
+                	
 				}
 
 			},
@@ -835,7 +863,7 @@ $(document).ready(function() {
 			success: function (data) {
 				$("#semiTransparentDiv").hide();
 					
-				if (data.success) {
+				if (data.success==="true") {
 					RefreshPage();
 				}else {
 					alert("Erreur Serveur Contactez Votre Administrateur");
@@ -870,11 +898,15 @@ $(document).ready(function() {
 			success: function (data) {
 				
 				$("#semiTransparentDiv").hide();
-				if (data.success) {
+				if (data.success==="true") {
 					
 					RefreshPage();
 				}else {
-					alert("Erreur Serveur Contactez Votre Administrateur");
+					
+					$("#semiTransparentDiv").hide();
+					$("#FileExistUpdate").show();
+                	$("#FileExistUpdate").removeAttr("hidden");
+                	$("#FileExistUpdate").text('Fichier existe déjà!');
 				}
 
 			},

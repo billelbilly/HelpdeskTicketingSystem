@@ -111,10 +111,23 @@ $(document).ready(function() {
 	
 	$("#file").on('change',function() {
 		Filevalidation();
+		var isHidden = document.getElementById("FileExist").hasAttribute("hidden");
+	
+    	if (!isHidden) {
+    		$("#FileExist").attr("hidden",true);
+    		$("#FileExist").hide();	
+		}
+    	
+    
 	});
 	
 	$("#fileUpdate").on('change',function() {
 		FilevalidationUpdate();
+		var isHidden = document.getElementById("FileExistUpdate").hasAttribute("hidden");
+		if (!isHidden) {
+    		$("#FileExistUpdate").attr("hidden",true);
+    		$("#FileExistUpdate").hide();	
+		}
 	});
 
 	
@@ -128,7 +141,7 @@ $(document).ready(function() {
 
 		$("#nbr_ticket_open").text("0 créés");
 		$("#nbr_ticket_assigned").text("0 Assignés");
-		$("#nbr_ticket_closed").text("0 Fermés");
+		//$("#nbr_ticket_closed").text("0 Fermés");
 		
 		///This is to clear up Ticket list And Close Creation Modal
 		$(".list-group").empty();
@@ -147,7 +160,7 @@ $(document).ready(function() {
 
 		if (isNotNull) {
 			var nbr_ticket_open=0;
-			var nbr_ticket_closed=0;
+			//var nbr_ticket_closed=0;
 			var nbr_ticket_assign=0;
 		
 			data.ticket.forEach(function(ticket) {
@@ -187,15 +200,16 @@ $(document).ready(function() {
 											<strong class="text-dark">${ticket[1]}</strong> <span class="${ticket[0]}" >${ticket[4]}</span><span
 												class="number pull-right"># ${ticket[0]}</span>
 											<p class="info">
-												créé par: <strong class="text-dark"> @${ticket[8]}</strong> le: ${date} <i
-													class="fa fa-comments"></i> <a id="${ticket[0]}"
+												créé par: <strong class="text-dark"> @${ticket[15]+"."+ticket[8]}</strong> le: ${date} <i
+													class="fa fa-comments"></i> <a id="responseBtn-${ticket[0]}"
 													class="btn  btn-info btn-sm" href="#" role="button" data-toggle="modal"	data-target="#issue">
 													Réponses</a>
+												<button id="responseHistory-${ticket[0]}" class="btn btn-sm btn-info " data-toggle="modal" data-target="#responseHistory" hidden><i class="fa fa-comments" style="pointer-events: none;"></i> Historique</button>
 											</p>
 										</div>
 									</div>
 									<button id="validate_ticket" class="btn btn-sm btn-success" hidden>Valider</button>
-									<button id="edit-${ticket[0]}" class="btn btn-sm btn-info " data-toggle="modal" data-target="#updateIssue"><i class="fa fa-edit" style="pointer-events: none;"></i>Edit</button>
+									<button id="edit-${ticket[0]}" class="btn btn-sm btn-info " data-toggle="modal" data-target="#updateIssue" hidden><i class="fa fa-edit" style="pointer-events: none;"></i>Edit</button>
 									<form action="/Helpdesk/DownloadAttachment" method="GET">
 									<input type="text" name="path" id="path-${ticket[0]}"
 														value="${ticket[7]}" hidden/>
@@ -211,13 +225,20 @@ $(document).ready(function() {
 			
 			    if ($("#userPermission").val()==3 || $("#userPermission").val()==1) {
 			    	$("#listPlanifBtn").removeAttr("hidden");
-			    	if (ticket[3]!=="fermer") {
-			    		$("#planif-"+ticket[0]+"").removeAttr("hidden");
-					}
-			    	
-			    	
+//			    	if (ticket[3]!=="fermer") {
+//			    		$("#planif-"+ticket[0]+"").removeAttr("hidden");
+//			    				
+//					}			    		    	
 			    	
 				}
+
+			    
+			    if ($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===ticket[16]) {
+
+			    	$("#edit-"+ticket[0]+"").removeAttr("hidden");
+				}
+			    
+	
 				switch (ticket[4]) {
 				case "Critique":
 					
@@ -243,12 +264,14 @@ $(document).ready(function() {
 					nbr_ticket_open++;
 					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-success");
 				}
-				else if(ticket[3]=="fermer") {
-					nbr_ticket_closed++;
-					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-danger");
-					$("#edit-"+ticket[0]+"").attr("hidden", true);
-					
-				}else {
+//				else if(ticket[3]=="fermer") {
+//					nbr_ticket_closed++;
+//					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-danger");
+//					$("#responseBtn-"+ticket[0]+"").hide();
+//		    		$("#responseHistory-"+ticket[0]+"").removeAttr("hidden");
+//					
+//				}
+				else {
 					nbr_ticket_assign++;
 					$("#backgroundTicket-"+ticket[0]+"").addClass("list-group-item-info");
 					
@@ -262,14 +285,16 @@ $(document).ready(function() {
 				// ****** When Clicking on Ticket Reponses This Happens
 				// ***************//
 				
-				$("#"+ticket[0]+"").click(function (e) {
+				$("#responseBtn-"+ticket[0]+"").click(function (e) {
 					var search_response=$('input.search_response').quicksearch('ul.media-list li');
 					
-					
 					var ticket_id=$((e.target)).attr('id');
+					ticket_id=""+ticket_id+"";
+					ticket_id = ticket_id.replace(/[^0-9]/g,'');					
+			
 					var ticket_detail_header=`
 					<p>
-					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[8]}</strong>
+					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[15]+"."+ticket[8]}</strong>
 					   le: ${date}
 					</p>
 				    <p>${ticket[2]}</p>	
@@ -281,6 +306,8 @@ $(document).ready(function() {
 					$('#ticket_detail_header').append(ticket_detail_header);
 					$(".modal #ticket_id").val(ticket_id);
 					$(".modal #responseDetail").val('');
+					
+						    
 					
 					showLoader();
 					
@@ -316,17 +343,16 @@ $(document).ready(function() {
 								objResponse.forEach(function(response) {
 								    
 								    var date_creation_response=getFormattedDate(response[2],"resp");
-								    
 								  
 									var ticket_response=`
 									
 									<li class="media">
-										    <!--<input type="number" name="inputName" id="rating1" class="rating text-warning" data-clearable="remove"/>-->
+										   <div id="review"></div>
 												<div class="media-body">
 												
 													<span class="text-muted pull-right"> <small
 														class="text-muted">Réponse le: ${date_creation_response}</small>
-													</span> <strong class="text-success">  @${response[3]}</strong>
+													</span> <strong class="text-success">  @${response[3]+" "+response[4]}</strong>
 													<p>
 														${response[1]}
 														
@@ -351,9 +377,107 @@ $(document).ready(function() {
 						},
 					});
 					// *****************************************************************//
+				
 					
-					/// Filter Response Here
-					// /******** Filtre Responses ***************///
+					
+
+				});
+				// *************************************************************//
+				
+				
+				// ****** When Clicking on Ticket History This Happens
+				// ***************//
+				
+				$("#responseHistory-"+ticket[0]+"").click(function (e) {
+					var search_response=$('input.search_response').quicksearch('ul.media-list li');
+					
+					var ticket_id=$((e.target)).attr('id');
+					ticket_id=""+ticket_id+"";
+					ticket_id = ticket_id.replace(/[^0-9]/g,'');					
+			
+					var ticket_detail_header=`
+					<p>
+					  Tiquet <strong class="text-dark">#${ticket[0]}</strong> créé par <strong class="text-dark"> @${ticket[15]+"."+ticket[8]}</strong>
+					   le: ${date}
+					</p>
+				    <p>${ticket[2]}</p>	
+					`;
+					$( "#ticket_detail_header_history p" ).remove();
+					$(".modal #historyList li").remove();
+					$('.response_list div').remove();
+					$('.ticket_list div').remove();
+					$('#ticket_detail_header_history').append(ticket_detail_header);
+				
+					
+					showLoader();
+					
+					
+					// ************ Get Responses By Ticket 
+					// Id****************//
+					
+					$.ajax({
+						type: "GET",
+						url: "/Helpdesk/ResponseManagement",
+						data: { 
+						    ticket_id: ticket_id,
+						    action: "/getResponses"
+						  },
+						dataType: "json",
+						
+						success: function (data) {
+							$("#semiTransparentDiv").hide();
+					
+							var objResponse=data.responses;
+							var userResponseSession;
+							
+							var isNotNull=false;
+							for(var prop in objResponse) {
+							    if(objResponse.hasOwnProperty(prop)) {
+							    	isNotNull=true;
+							    }
+							  }
+							
+							if (isNotNull) {
+				
+								
+								objResponse.forEach(function(response) {
+								    
+								    var date_creation_response=getFormattedDate(response[2],"resp");
+								  
+									var ticket_response=`
+									
+									<li class="media">
+										   <div id="review"></div>
+												<div class="media-body">
+												
+													<span class="text-muted pull-right"> <small
+														class="text-muted">Réponse le: ${date_creation_response}</small>
+													</span> <strong class="text-success">  @${response[3]}</strong>
+													<p>
+														${response[1]}
+														
+													</p>
+												</div>
+									
+								     </li>`;
+									
+									$( "#historyList" ).append(ticket_response);
+									
+								});
+								search_response.cache();
+							}else {
+
+								$('.response_list').append('<div class="alert alert-warning" role="alert">Pas de Réponses pour le moment !</div>');
+							}
+
+						},
+						error: function (XMLHttpRequest, textStatus, errorThrown) {
+							$("#semiTransparentDiv").hide();
+							alert("Erreur Serveur Contactez Votre Administrateur");
+						},
+					});
+					// *****************************************************************//
+				
 					
 					
 
@@ -532,7 +656,7 @@ $(document).ready(function() {
 			
 			// Set number ticket here
 			$("#nbr_ticket_open").text(nbr_ticket_open+" créés");
-			$("#nbr_ticket_closed").text(nbr_ticket_closed+" Fermés");
+			//$("#nbr_ticket_closed").text(nbr_ticket_closed+" Fermés");
 			$("#nbr_ticket_assigned").text(nbr_ticket_assign+" Assignés");
 	
 
@@ -543,15 +667,7 @@ $(document).ready(function() {
 		
 	}
 	
-	
-	
-	
-//	function successCallBack(data) {
-//		console.log("inside CallBack");
-//		$("#semiTransparentDiv").hide();
-//		getTickets(data);
-//	}
-	
+
 	function RefreshPage() {
 		$('.ticket_list div').hide();
 		showLoader();
@@ -581,12 +697,8 @@ $(document).ready(function() {
 	
 
 	
-	// /******** Check UserPermission ***************///
-//	if($("#userPermission").val() !=1){
-//		$("#back").hide();
-//		$(".d-flex").removeClass("justify-content-between");
-//		$(".d-flex").addClass("justify-content-end");	
-//	}
+	///******** Check UserPermission ***************///
+
 	if ($("#userPermission").val()==1) {
 		tabsToAdd=`<li class="active open"><a href="panneauAdmin_new.jsp"><i
 		class="zmdi zmdi-home"></i><span>Tableau de Bord</span></a></li>		
@@ -594,12 +706,22 @@ $(document).ready(function() {
 				class="zmdi zmdi-account-box-mail"></i><span>Utilisateurs &
 					Contacts</span></a></li>
 		<li><a href="Statistics.jsp"><i
-				class="zmdi zmdi-chart"></i><span>Statistiques</span></a></li>`;
+				class="zmdi zmdi-chart"></i><span>Statistiques</span></a></li>
+				<li><a href="ClosedTickets.jsp"><i
+				class="zmdi zmdi zmdi-folder-star-alt"></i><span>Tiquets Fermés</span></a></li>
+				`;
 		$("ul.list").append(tabsToAdd);
 		
 		
+	}else {
+	tabsToAdd=`<li class="active open"><a href="mainTemplate_new.jsp">
+	<i class="zmdi zmdi-home"></i><span>Tableau de Bord</span></a></li>
+	<li><a href="ClosedTickets.jsp"><i
+				class="zmdi zmdi-folder-star-alt"></i><span>Tiquets Fermés</span></a></li>
+				`;
+		$("ul.list").append(tabsToAdd);
 	}
-	// /*********************************************///
+	///*********************************************///
 	
 	// /******** Filtre Tickets ***************///
 	$('#filtreTicket').change(function() {
@@ -674,7 +796,7 @@ $(document).ready(function() {
 			dataType : "json",
 			success : function(data) {
 				$("#semiTransparentDiv").hide();
-				if (data.success) {
+				if (data.success==="true") {
 					
 					RefreshPage();
 					
@@ -708,7 +830,12 @@ $(document).ready(function() {
 					});
 
 				} else {
-					alert("No Ticket Available !");
+					$("#semiTransparentDiv").hide();
+					$("#FileExist").show();
+                	$("#FileExist").removeAttr("hidden");
+                	$("#FileExist").text('Fichier existe déjà!');
+                	
+                	
 				}
 
 			},
@@ -736,7 +863,7 @@ $(document).ready(function() {
 			success: function (data) {
 				$("#semiTransparentDiv").hide();
 					
-				if (data.success) {
+				if (data.success==="true") {
 					RefreshPage();
 				}else {
 					alert("Erreur Serveur Contactez Votre Administrateur");
@@ -771,11 +898,15 @@ $(document).ready(function() {
 			success: function (data) {
 				
 				$("#semiTransparentDiv").hide();
-				if (data.success) {
+				if (data.success==="true") {
 					
 					RefreshPage();
 				}else {
-					alert("Erreur Serveur Contactez Votre Administrateur");
+					
+					$("#semiTransparentDiv").hide();
+					$("#FileExistUpdate").show();
+                	$("#FileExistUpdate").removeAttr("hidden");
+                	$("#FileExistUpdate").text('Fichier existe déjà!');
 				}
 
 			},
@@ -1092,8 +1223,8 @@ $(document).ready(function() {
 	////***********************************************************************************////
 	
 
-	// initialize with defaults
-//	$("#rating1").rating();
+	// initialize Rating
+	$("#review").rating();
 	
 	//Clear Search and back to first page 
 	$("#search").keydown(function(){

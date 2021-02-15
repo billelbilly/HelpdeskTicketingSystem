@@ -34,6 +34,49 @@ function getFormattedDate(datetoformat) {
 	return str;
 }
 
+//Function to get list of Users Entreprise
+function getStructure() {
+
+	$.ajax({
+		type : "GET",
+		url : "/Helpdesk/Settings",
+		data : {
+			action : "/getStructureList"
+		},
+		// processData: false,
+		// contentType: "text",
+		dataType : "json",
+		success : function(data) {
+
+			$('#structure').empty();
+			$('#structureEdit_id').empty();
+
+			for (var i = 0; i < data.length; i++) {
+		
+				$('#structure').append(
+						'<option value="' + data[i][0] + '">' + data[i][1]
+								+ '</option>');
+				$('#structureEdit_id').append(
+						'<option value="' + data[i][0] + '">' + data[i][1]
+								+ '</option>');
+
+			}
+
+			// Initialize select2
+			$("#structure").select2();
+			//$("#structureEdit_id").select2();
+
+		},
+		error : function(XMLHttpRequest, textStatus, errorThrown) {
+			alert("Erreur Serveur Contactez Votre Administrateur");
+		},
+	});
+
+}
+
+getStructure();
+
+
 function getUsersTabulator() {
 	// create Tabulator on DOM element with id "example-table"
 	var table = new Tabulator("#usersList", {
@@ -140,6 +183,12 @@ function getUsersTabulator() {
 						invalidPlaceholder : "",
 					}
 				},
+				{
+					title : "Structure",
+					field : "8",
+					headerFilter : true,
+					headerFilterPlaceholder : "Recherche",
+				},
 				
 //				{
 //					formatter : deleteUser,
@@ -161,11 +210,30 @@ function getUsersTabulator() {
 					cellClick : function(e, cell) {
 						$("#password_id").val('');
 						$("#password2_id").val('');
+						var userTypeis=cell.getRow().getData(0)[6].toString();
+						if (userTypeis==="1" || userTypeis==="3") {
+							$("#prenom_id").attr("required",true);
+						
+							
+						} else {
+							
+							var isHidden = document.getElementById("prenom_id")
+							.hasAttribute("required");
+							
+							if (isHidden) {
+								$("#prenom_id").removeAttr("required");
+								
+							}
+							
+							$("#date_expiration_compte_Edit").show();
+							$("#date_expiration_compte_EditUser").attr("required",true);
+						}
 						var phone_id="";
 						var dateExpiration="";
 						var user_id = cell.getRow().getData(0)[0].toString();
 						var prenom_id = "";
 						var nom_id = "";
+						var structure="";
 						var email_id = cell.getRow().getData(0)[3].toString();
 						if (cell.getRow().getData(0)[4]!=null) {
 							phone_id = cell.getRow().getData(0)[4].toString();
@@ -202,6 +270,17 @@ function getUsersTabulator() {
 						} else {
 							$("#date_expiration_compte_Edit").hide();
 						}
+						
+						if (userTypeis==="2" || userTypeis==="3") {
+							$("#structureEdit").show();
+							if (cell.getRow().getData(0)[8]!=null) {
+								structure=cell.getRow().getData(0)[8].toString();
+								
+							}
+							
+						}else {
+							$("#structureEdit").hide();
+						}
 								
 
 						$(".modal-body #user_id").val(user_id);
@@ -213,6 +292,18 @@ function getUsersTabulator() {
 						$(".modal-body #userType_id").val(userType_id);
 						$(".modal-body #date_expiration_compte_EditUser").val(
 								dateExpiration);
+						
+						// This function is for selecting the Edited user structure
+						$(".modal-body #structureEdit_id > option").each(function() {
+							
+							if (this.text==structure) {
+								$(this).attr("selected","selected");
+								
+							}
+	    	
+						  
+						});
+				
 
 					}
 				} ],
@@ -496,8 +587,10 @@ $("#gestionUtilisateur").on("click",function(){
 // Hide or Show Expiration field depending on user Type
 $("#date_expiration_compte_Register").hide();
 $("#date_expiration_compte_Edit").hide();
+$("#structureRegister").hide();
 $("#userTypeRegister_id").on("change",function(){
 	var userType=$("#userTypeRegister_id").val();
+	
 	
 	if (userType==2) {
 		$("#date_expiration_compte_Register").show();
@@ -509,8 +602,38 @@ $("#userTypeRegister_id").on("change",function(){
 		if (isHidden) {
 		$("#date_expiration_compte").removeAttr("required");		
 	}
+		
+		
 		$("#date_expiration_compte_Register").hide();
 	}
+	var isHidden = document.getElementById("prenomRegister_id")
+	.hasAttribute("required");
+	
+	if (userType==1 || userType==3) {
+		
+		if (!isHidden) {
+		$("#prenomRegister_id").attr("required",true);
+	
+		}
+		
+	}
+	else {
+		
+		if (isHidden) {
+		$("#prenomRegister_id").removeAttr("required");
+
+	}
+		
+	}
+	
+	if (userType==2 || userType==3) {
+		$("#structureRegister").show();
+//		getStructure();
+		
+	}else {
+		$("#structureRegister").hide();
+	}
+	
 	
 })
 

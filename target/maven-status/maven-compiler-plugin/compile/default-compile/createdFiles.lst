@@ -17,6 +17,7 @@ com\biginformatique\helpdesk\controllers\Statistics.class
 com\biginformatique\helpdesk\controllers\DownloadAttachment.class
 com\biginformatique\helpdesk\dao\ContactsDao.class
 com\biginformatique\helpdesk\models\Ticket.class
+com\biginformatique\helpdesk\models\Structure.class
 com\biginformatique\helpdesk\util\CharacterEncodingFilter.class
 com\biginformatique\helpdesk\dao\UserDao.class
 com\biginformatique\helpdesk\models\Version.class

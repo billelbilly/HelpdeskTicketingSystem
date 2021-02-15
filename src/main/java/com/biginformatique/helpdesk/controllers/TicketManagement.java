@@ -97,6 +97,17 @@ public class TicketManagement extends HttpServlet {
 			}
 
 			break;
+			
+		case "/getClosedTickets":
+			try {
+				getClosedTickets(request, response);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			break;
+			
 		case "/filtreTickets":
 			try {
 				filtreTicket(request, response);
@@ -163,15 +174,30 @@ public class TicketManagement extends HttpServlet {
 
 	}
 
+	private void getClosedTickets(HttpServletRequest request, HttpServletResponse response) throws Exception {
+		User user = null;
+		String username = request.getParameter("usersession");
+		user = userDao.getUserByUsername(username);
+		List allTickets = ticketDao.getClosedTicketsDao(user);
+		JSONObject jo = new JSONObject();
+		jo.put("ticket", allTickets);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(jo.toString());
+		
+	}
+
 	private void getAssignResponses(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String username = request.getParameter("usersession");
 		User user = userDao.getUserByUsername(username);
 		List assignedTickets = ticketDao.getAssignResponsesDao(user);
+		List assignedTicketsResponses = ticketDao.getResponsesOfUserEntrepriseDao(user);
 
 		JSONObject jo = new JSONObject();
 		// get each ticket username Creator as json object and send
 		// it to the Client Side
 		jo.put("assignedTickets", assignedTickets);
+		jo.put("assignedTicketsResponses", assignedTicketsResponses);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(jo.toString());
@@ -522,25 +548,51 @@ public class TicketManagement extends HttpServlet {
 			// Save File to Upload Directory
 //			part.write(fileSaveDir + File.separator + fileName);
 			String FilePathToDownload = fileSaveDir + File.separator + fileName;
+			File FileExist = new File(FilePathToDownload);
+			boolean exists = FileExist.exists();
+			
+			if (!exists) {
+				try (InputStream input = part.getInputStream()) {
+					Files.copy(input, file.toPath());
+				}
+				ticket.setAttachment(FilePathToDownload);
+				String userToSearch = session.getAttribute("username").toString();
+				user = userDao.getUserByUsername(userToSearch);
+				ticket.setUser(user);
+				ticketDao.saveTicket(ticket);
+				JSONObject jo = new JSONObject();
+				jo.put("success", "true");
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(jo.toString());
+				
+			} else {
+				
+				JSONObject jo = new JSONObject();
+				jo.put("success", "false");
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(jo.toString());
 
-			try (InputStream input = part.getInputStream()) {
-				Files.copy(input, file.toPath());
 			}
-			ticket.setAttachment(FilePathToDownload);
+	
+			
 
+		}else {
+			
+			String userToSearch = session.getAttribute("username").toString();
+			user = userDao.getUserByUsername(userToSearch);
+			ticket.setUser(user);
+			ticketDao.saveTicket(ticket);
+			JSONObject jo = new JSONObject();
+			jo.put("success", "true");
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(jo.toString());
+			
 		}
 
-		String userToSearch = session.getAttribute("username").toString();
-
-		user = userDao.getUserByUsername(userToSearch);
-		ticket.setUser(user);
-
-		ticketDao.saveTicket(ticket);
-		JSONObject jo = new JSONObject();
-		jo.put("success", "true");
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(jo.toString());
+		
 
 	}
 
@@ -625,42 +677,90 @@ public class TicketManagement extends HttpServlet {
 			// Save File to Upload Directory
 //			part.write(fileSaveDir + File.separator + fileName);
 			String FilePathToDownload = fileSaveDir + File.separator + fileName;
+			File FileExist = new File(FilePathToDownload);
+			boolean exists = FileExist.exists();
+			
+			if (!exists) {
+				
+				try (InputStream input = part.getInputStream()) {
+					Files.copy(input, file.toPath());
+				}
+				ticket.setAttachment(FilePathToDownload);
+				// Get The User Who Created The Ticket here
+				Ticket ticketCreator = ticketDao.getTicketById(ticketId);
+				// if etatTicket is fermer get the user who closed the ticket and add it to the
+				// ticket object
+				user = userDao.getUserById(ticketCreator.getUser().getUser_id());
+				userCloser = userDao.getUserByUsername(userSession);
+				ticket.setUser(user);
+				if (etatTicket.equals("fermer")) {
+					ticket.setClosedBy(userCloser.getFirstName() + "." + userCloser.getLastName());
+					String recipient= ticketCreator.getUser().getEmail();
+					String subject = "Tiquet Fermé";
+					// Add more info to the content such Ticket number software in question ...
+					String content = "Bonjour,<br><br>Votre Tiquet Numéro: #" + ticketId + " a été fermé.";
+					content += "<br><br>Cordialement.";
+					// Send Email Notification here
+					try {
+						EmailUtility.sendEmail(smtp, port, email, name, pass, recipient, subject, content);
+					} catch (Exception e) {
 
-			try (InputStream input = part.getInputStream()) {
-				Files.copy(input, file.toPath());
+						e.printStackTrace();
+					}
+				}
+
+				ticketDao.updateTicketDao(ticket);
+				JSONObject jo = new JSONObject();
+				jo.put("success", "true");
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(jo.toString());
+				
+				
+			} else {
+				JSONObject jo = new JSONObject();
+				jo.put("success", "false");
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(jo.toString());
+
 			}
-			ticket.setAttachment(FilePathToDownload);
 
-		}
-		// Get The User Who Created The Ticket here
-		Ticket ticketCreator = ticketDao.getTicketById(ticketId);
-		// if etatTicket is fermer get the user who closed the ticket and add it to the
-		// ticket object
-		user = userDao.getUserById(ticketCreator.getUser().getUser_id());
-		userCloser = userDao.getUserByUsername(userSession);
-		ticket.setUser(user);
-		if (etatTicket.equals("fermer")) {
-			ticket.setClosedBy(userCloser.getFirstName() + "." + userCloser.getLastName());
-			String recipient= ticketCreator.getUser().getEmail();
-			String subject = "Tiquet Fermé";
-			// Add more info to the content such Ticket number software in question ...
-			String content = "Bonjour,<br><br>Votre Tiquet Numéro: #" + ticketId + " a été fermé.";
-			content += "<br><br>Cordialement.";
-			// Send Email Notification here
-			try {
-				EmailUtility.sendEmail(smtp, port, email, name, pass, recipient, subject, content);
-			} catch (Exception e) {
+			
 
-				e.printStackTrace();
+		}else {
+			// Get The User Who Created The Ticket here
+			Ticket ticketCreator = ticketDao.getTicketById(ticketId);
+			// if etatTicket is fermer get the user who closed the ticket and add it to the
+			// ticket object
+			user = userDao.getUserById(ticketCreator.getUser().getUser_id());
+			userCloser = userDao.getUserByUsername(userSession);
+			ticket.setUser(user);
+			if (etatTicket.equals("fermer")) {
+				ticket.setClosedBy(userCloser.getFirstName() + "." + userCloser.getLastName());
+				String recipient= ticketCreator.getUser().getEmail();
+				String subject = "Tiquet Fermé";
+				// Add more info to the content such Ticket number software in question ...
+				String content = "Bonjour,<br><br>Votre Tiquet Numéro: #" + ticketId + " a été fermé.";
+				content += "<br><br>Cordialement.";
+				// Send Email Notification here
+				try {
+					EmailUtility.sendEmail(smtp, port, email, name, pass, recipient, subject, content);
+				} catch (Exception e) {
+
+					e.printStackTrace();
+				}
 			}
+
+			ticketDao.updateTicketDao(ticket);
+			JSONObject jo = new JSONObject();
+			jo.put("success", "true");
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().write(jo.toString());
+			
 		}
 
-		ticketDao.updateTicketDao(ticket);
-		JSONObject jo = new JSONObject();
-		jo.put("success", "true");
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(jo.toString());
 
 	}
 

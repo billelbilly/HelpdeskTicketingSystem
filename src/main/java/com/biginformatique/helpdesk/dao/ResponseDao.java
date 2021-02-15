@@ -54,7 +54,8 @@ public class ResponseDao {
 				transaction = session.beginTransaction();
 			
 				Query query = session.createQuery(
-						"SELECT R.id, R.Response, R.createDateTime,U.username FROM Response R, User U WHERE R.ticket = :ticket AND R.user=U.user_id ORDER BY R.createDateTime DESC ")
+						"SELECT R.id, R.Response, R.createDateTime,U.firstName, U.lastName FROM Response R, User U "
+						+ "WHERE R.ticket = :ticket AND R.user=U.user_id ORDER BY R.createDateTime DESC ")
 						.setParameter("ticket", ticket);
 				
 				responses = query.list();

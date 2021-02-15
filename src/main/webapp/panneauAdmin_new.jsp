@@ -51,21 +51,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-lg-3 col-md-4 col-sm-12">
-				<div class="card">
-					<div id="card_danger" class="body bg-danger">
-						<h6>Tiquets Fermés</h6>
-						<h2 id="nbr_fermer"></h2>
+<!-- 			<div class="col-lg-3 col-md-4 col-sm-12"> -->
+<!-- 				<div class="card"> -->
+<!-- 					<div id="card_danger" class="body bg-danger"> -->
+<!-- 						<h6>Tiquets Fermés</h6> -->
+<!-- 						<h2 id="nbr_fermer"></h2> -->
 
-						<small id="percent_closed"></small>
-						<div class="progress">
-							<div id="percent_closed_progress" class="progress-bar l-amber"
-								role="progressbar" aria-valuenow="45" aria-valuemin="0"
-								aria-valuemax="100"></div>
-						</div>
-					</div>
-				</div>
-			</div>
+<!-- 						<small id="percent_closed"></small> -->
+<!-- 						<div class="progress"> -->
+<!-- 							<div id="percent_closed_progress" class="progress-bar l-amber" -->
+<!-- 								role="progressbar" aria-valuenow="45" aria-valuemin="0" -->
+<!-- 								aria-valuemax="100"></div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 			<div class="col-lg-3 col-md-4 col-sm-12">
 				<div class="card">
 					<div id="card_info" class="body bg-info">

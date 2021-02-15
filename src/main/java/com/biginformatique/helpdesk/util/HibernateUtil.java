@@ -32,9 +32,9 @@ public class HibernateUtil {
 		if (sessionFactory == null) {
 			try {
 				Configuration configuration = new Configuration();
-				DB_URL=System.getenv("$DB_URL");
-				DB_USER=System.getenv("$DB_USER");
-				DB_PASS=System.getenv("$DB_PASS");
+				DB_URL=System.getenv("DB_URL");
+				DB_USER=System.getenv("DB_USER");
+				DB_PASS=System.getenv("DB_PASS");
 
 				// Hibernate settings equivalent to hibernate.cfg.xml's properties
 				Properties settings = new Properties();

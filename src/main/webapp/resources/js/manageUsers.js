@@ -1,13 +1,13 @@
 
-var deleteUser = function(cell, formatterParams) {
-	var id = cell.getRow().getData(0)[0].toString();
-	return '<button id='
-			+ id
-			+ ' class=" open_modal btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_user_modal" data-id='
-			+ id
-			+ ' data-toggle="tooltip" title="Delete User"><i class="fa fa-trash fa-sm" style="color:white"></i></button>'
-
-};
+//var deleteUser = function(cell, formatterParams) {
+//	var id = cell.getRow().getData(0)[0].toString();
+//	return '<button id='
+//			+ id
+//			+ ' class=" open_modal btn btn-danger btn-sm" data-toggle="modal" data-target="#delete_user_modal" data-id='
+//			+ id
+//			+ ' data-toggle="tooltip" title="Delete User"><i class="fa fa-trash fa-sm" style="color:white"></i></button>'
+//
+//};
 
 var editUser = function(cell, formatterParams) {
 	var id = cell.getRow().getData(0)[0].toString();
@@ -64,7 +64,7 @@ function getStructure() {
 
 			// Initialize select2
 			$("#structure").select2();
-			$("#structureEdit_id").select2();
+			//$("#structureEdit_id").select2();
 
 		},
 		error : function(XMLHttpRequest, textStatus, errorThrown) {
@@ -73,6 +73,9 @@ function getStructure() {
 	});
 
 }
+
+getStructure();
+
 
 function getUsersTabulator() {
 	// create Tabulator on DOM element with id "example-table"
@@ -187,17 +190,17 @@ function getUsersTabulator() {
 					headerFilterPlaceholder : "Recherche",
 				},
 				
-				{
-					formatter : deleteUser,
-					align : "center",
-					width : 51,
-					headerSort : false,
-					cellClick : function(e, cell) {
-						var id = cell.getRow().getData(0)[0].toString();
-						$(".modal-footer #username_id").val(id);
-
-					}
-				},
+//				{
+//					formatter : deleteUser,
+//					align : "center",
+//					width : 51,
+//					headerSort : false,
+//					cellClick : function(e, cell) {
+//						var id = cell.getRow().getData(0)[0].toString();
+//						$(".modal-footer #username_id").val(id);
+//
+//					}
+//				},
 
 				{
 					formatter : editUser,
@@ -208,7 +211,6 @@ function getUsersTabulator() {
 						$("#password_id").val('');
 						$("#password2_id").val('');
 						var userTypeis=cell.getRow().getData(0)[6].toString();
-						getStructure();
 						if (userTypeis==="1" || userTypeis==="3") {
 							$("#prenom_id").attr("required",true);
 						
@@ -222,12 +224,16 @@ function getUsersTabulator() {
 								$("#prenom_id").removeAttr("required");
 								
 							}
+							
+							$("#date_expiration_compte_Edit").show();
+							$("#date_expiration_compte_EditUser").attr("required",true);
 						}
 						var phone_id="";
 						var dateExpiration="";
 						var user_id = cell.getRow().getData(0)[0].toString();
 						var prenom_id = "";
 						var nom_id = "";
+						var structure="";
 						var email_id = cell.getRow().getData(0)[3].toString();
 						if (cell.getRow().getData(0)[4]!=null) {
 							phone_id = cell.getRow().getData(0)[4].toString();
@@ -264,6 +270,17 @@ function getUsersTabulator() {
 						} else {
 							$("#date_expiration_compte_Edit").hide();
 						}
+						
+						if (userTypeis==="2" || userTypeis==="3") {
+							$("#structureEdit").show();
+							if (cell.getRow().getData(0)[8]!=null) {
+								structure=cell.getRow().getData(0)[8].toString();
+								
+							}
+							
+						}else {
+							$("#structureEdit").hide();
+						}
 								
 
 						$(".modal-body #user_id").val(user_id);
@@ -275,6 +292,18 @@ function getUsersTabulator() {
 						$(".modal-body #userType_id").val(userType_id);
 						$(".modal-body #date_expiration_compte_EditUser").val(
 								dateExpiration);
+						
+						// This function is for selecting the Edited user structure
+						$(".modal-body #structureEdit_id > option").each(function() {
+							
+							if (this.text==structure) {
+								$(this).attr("selected","selected");
+								
+							}
+	    	
+						  
+						});
+				
 
 					}
 				} ],
@@ -599,7 +628,7 @@ $("#userTypeRegister_id").on("change",function(){
 	
 	if (userType==2 || userType==3) {
 		$("#structureRegister").show();
-		getStructure();
+//		getStructure();
 		
 	}else {
 		$("#structureRegister").hide();

@@ -391,6 +391,62 @@ $("#LogicielVersionForm").submit(function(e) {
 	});
 });
 
+$("#StructureForm").submit(
+		function(e) {
+			e.preventDefault(); // avoid to execute the actual submit of the
+								// form to
+			var form = $(this);
+			var form_data = $("#StructureForm").serialize();
+			showLoader();
+			$.ajax({
+
+				type : "POST",
+				url : form.attr("action"),
+				data : form_data, // serializes the form's elements.
+
+				dataType : "json",
+				success : function(data) {
+					$("#semiTransparentDiv").hide();
+					if (data.success === "true") {
+						$("#semiTransparentDiv").hide();
+						var isHidden = document.getElementById("StructureAlert")
+								.hasAttribute("hidden");
+						if (isHidden) {
+							$("#StructureAlert").removeAttr("hidden");
+							if ($("#StructureAlert").hasClass("alert alert-danger")) {
+								$("#StructureAlert").removeClass("alert alert-danger")
+							}
+							$("#StructureAlert").addClass("alert alert-success");
+							$("#StructureAlert").text(
+									'Structure Ajouté Avec Succès !');
+							$('#nomStructure').val('');
+						}
+
+					}else {
+						$("#semiTransparentDiv").hide();
+						var isHidden = document.getElementById("StructureAlert")
+								.hasAttribute("hidden");
+						if (isHidden) {
+							$("#StructureAlert").removeAttr("hidden");
+							if ($("#StructureAlert").hasClass("alert alert-success")) {
+								$("#StructureAlert").removeClass("alert alert-success")
+							}
+							$("#StructureAlert").addClass("alert alert-danger");
+							$("#StructureAlert").text(
+									'Structure existe déjà !');
+							$('#nomStructure').val('');
+						}
+						
+					}
+
+				},
+				error : function(XMLHttpRequest, textStatus, errorThrown) {
+					$("#semiTransparentDiv").hide();
+					alert("Erreur Serveur Contactez votre Administrateur !");
+				},
+			});
+		});
+
 $("#nomVersion").attr('disabled', true);
 $("#listLogiciel").attr('disabled', true);
 $("#listVersion").attr('disabled', true);
@@ -459,6 +515,17 @@ $("#nomLogiciel").on(
 					"hidden");
 			if (!isHidden) {
 				$("#alertParam").attr("hidden", true);
+
+			}
+		});
+
+$("#nomStructure").on(
+		'focus',
+		function() {
+			var isHidden = document.getElementById("StructureAlert").hasAttribute(
+					"hidden");
+			if (!isHidden) {
+				$("#StructureAlert").attr("hidden", true);
 
 			}
 		});

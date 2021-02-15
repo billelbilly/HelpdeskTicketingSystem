@@ -51,7 +51,7 @@
 		
 		var editTicket = function(cell, formatterParams) {
 			var id = cell.getRow().getData(0)[0].toString();
-			if (cell.getRow().getData(0)[3].toString()!=="fermer") {
+			if (($("#userPermission").val()==1 || $("#userPermission").val()==2 || $("#usersession").val()===cell.getRow().getData(0)[8]) && cell.getRow().getData(0)[3].toString()!=="fermer") {
 			return '<button id='
 					+ id
 					+ ' class=" open_modal btn btn-success btn-sm" data-toggle="modal" data-target="#updateIssueOfTableView" data-id='
@@ -115,7 +115,7 @@
 				break;
 
 			default:
-				 var str = String(date.getDate()).padStart(2, '0') + "/" + String((date.getMonth() + 1)).padStart(2, '0') + "/" + date.getFullYear();
+				 var str = date.getFullYear() + "-" +  String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0') + " " +  date.getHours() + ":" +String(date.getMinutes()).padStart(2, '0');;
 				break;
 			}
 		   
@@ -169,7 +169,7 @@
 					var nbr_fermer = 0;
 					var nbr_assign=0;
 					var percent_open=0;
-					var percent_closed=0;
+					//var percent_closed=0;
 					var percent_assigned=0;
 					var Total_Ticket=response.ticket.length;
 					response.ticket.forEach(function(ticket) {
@@ -177,12 +177,16 @@
 						if (ticket[3] == "créé") {
 							nbr_open++;
 
-						} else if (ticket[3]=="fermer") {
-							nbr_fermer++;
-							
-						}else {
+						}
+						
+//						else if (ticket[3]=="fermer") {
+//							nbr_fermer++;
+//							
+//						}
+						
+						else {
 							nbr_assign++;
-							ticket[3]="assigné";
+						
 						}
 						
 						
@@ -190,23 +194,23 @@
 					});
 		            // Dump each Ticket number to The Interface.
 					$("#nbr_open").text(nbr_open);
-					$("#nbr_fermer").text(nbr_fermer);
+					//$("#nbr_fermer").text(nbr_fermer);
 					$("#nbr_assign").text(nbr_assign);
 					
 					if (Total_Ticket!=0) {
 						// Dump each Ticket percentage to The Interface.
 						percent_open=Math.round((nbr_open*100)/Total_Ticket);
-						percent_closed=Math.round((nbr_fermer*100)/Total_Ticket);
+						//percent_closed=Math.round((nbr_fermer*100)/Total_Ticket);
 						percent_assigned=Math.round((nbr_assign*100)/Total_Ticket);
 					} 
 					
 					
 					$("#percent_open_progress").css("width", percent_open*2);
-					$("#percent_closed_progress").css("width", percent_closed*2);
+					//$("#percent_closed_progress").css("width", percent_closed*2);
 					$("#percent_assigned_progress").css("width", percent_assigned*2);
 					
 					$("#percent_open").text(percent_open+"%");
-					$("#percent_closed").text(percent_closed+"%");
+					//$("#percent_closed").text(percent_closed+"%");
 					$("#percent_assigned").text(percent_assigned+"%");
 					
 
@@ -228,6 +232,14 @@
 						headerFilter : true,
 						headerFilterPlaceholder:"Recherche",
 					},
+					
+					// Define Table Columns
+					{
+						title : "Client/User",
+						field : "8",
+						headerFilter : true,
+						headerFilterPlaceholder:"Recherche",
+					},
 				// Define Table Columns
 				{
 					title : "Objet",
@@ -244,29 +256,36 @@
 						
 						var ticket_info;
 						var creationDate=getFormattedDate(cell.getRow().getData(0)[5].toString());
+						var ticketCreator=cell.getRow().getData(0)[15].toString()+"."+cell.getRow().getData(0)[8].toString();
+						var logiciel=cell.getRow().getData(0)[9].toString();
+						var version=cell.getRow().getData(0)[10].toString();
 					
 						$("#Details").modal("show");
 					   // Clear closing_info div from any paragraph first
 						$("#ticket_info").empty();
-						if (cell.getRow().getData(0)[3].toString()=="fermer") {
+//						if (cell.getRow().getData(0)[3].toString()=="fermer") {
+//							
+//							var closingDate=getFormattedDate(cell.getRow().getData(0)[13].toString());
+//							var ticketCloser=cell.getRow().getData(0)[12].toString();
+//							ticket_info=`<p>créé par: <strong>@${ticketCreator}</strong>, le: <strong>${creationDate}</strong></p>
+//							 <p>Fermé par: <strong>@${ticketCloser}</strong> le: <strong>${closingDate}</strong></p>
+//							 <p>Logiciel & Version: <strong>${logiciel}, ${version}</strong> </p>`;
+//							$("#ticket_info").html(ticket_info);
+//						}else 
 							
-							var closingDate=getFormattedDate(cell.getRow().getData(0)[13].toString());
-							ticket_info=`<p>créé par: <strong>@${cell.getRow().getData(0)[8].toString()}</strong>, le: <strong>${creationDate}</strong></p>
-							 <p>Fermé par: <strong>@${cell.getRow().getData(0)[12].toString()}</strong> le: <strong>${closingDate}</strong></p>
-							 <p>Logiciel & Version: <strong>${cell.getRow().getData(0)[9].toString()}, ${cell.getRow().getData(0)[10].toString()}</strong> </p>`;
-							$("#ticket_info").html(ticket_info);
-						}else if (cell.getRow().getData(0)[3].toString()=="créé") {
+							if (cell.getRow().getData(0)[3].toString()=="créé") {
 							ticket_info=`
-								 <p>créé par: <strong>@${cell.getRow().getData(0)[8].toString()}</strong>, le: <strong>${creationDate}</strong></p>
-								 <p>Logiciel & Version: <strong>${cell.getRow().getData(0)[9].toString()}, ${cell.getRow().getData(0)[10].toString()}</strong> </p>
+								 <p>créé par: <strong>@${ticketCreator}</strong>, le: <strong>${creationDate}</strong></p>
+								 <p>Logiciel & Version: <strong>${logiciel}, ${version}</strong> </p>
 								`;
 								$("#ticket_info").html(ticket_info);
 							
 						}else {
 							var assignDate=getFormattedDate(cell.getRow().getData(0)[14].toString());
-							ticket_info=`<p>créé par: <strong>@${cell.getRow().getData(0)[8].toString()}</strong>, le: <strong>${creationDate}</strong></p>
-								 <p>Assigné à: <strong>@${cell.getRow().getData(0)[11].toString()}</strong> le: <strong>${assignDate}</strong></p>
-								 <p>Logiciel & Version: <strong>${cell.getRow().getData(0)[9].toString()}, ${cell.getRow().getData(0)[10].toString()}</strong> </p>
+							var assignedUser=cell.getRow().getData(0)[11].toString();
+							ticket_info=`<p>créé par: <strong>@${ticketCreator}</strong>, le: <strong>${creationDate}</strong></p>
+								 <p>Assigné à: <strong>@${assignedUser}</strong> le: <strong>${assignDate}</strong></p>
+								 <p>Logiciel & Version: <strong>${logiciel}, ${version}</strong> </p>
 								`;
 								$("#ticket_info").html(ticket_info);
 						}
@@ -449,7 +468,7 @@
  	 	 						var search_response=$('input.search_response').quicksearch('ul.media-list li');
  	 	 						var ticket_id = cell.getRow().getData(0)[0].toString();
  	 	 						var date=getFormattedDate(cell.getRow().getData(0)[5].toString(),"ticket");
- 	 	 						var creator=cell.getRow().getData(0)[8].toString();
+ 	 	 						var creator=cell.getRow().getData(0)[15].toString()+"."+cell.getRow().getData(0)[8].toString();
  	 	 						
  	 	 						var detail=cell.getRow().getData(0)[2].toString();
  	 	 						
@@ -513,7 +532,7 @@
  	 	 													
  	 	 														<span class="text-muted pull-right"> <small
  	 	 															class="text-muted">Réponse le: ${date_creation_response}</small>
- 	 	 														</span> <strong class="text-success">  @${response[3]}</strong>
+ 	 	 														</span> <strong class="text-success">  @${response[3]+" "+response[4]}</strong>
  	 	 														<p>
  	 	 															${response[1]}
  	 	 															
@@ -554,12 +573,16 @@
 								+ "<span style='color:green; margin-left:10px;'>("
 								+ count + " Tiquets)</span>";
 
-					} else if(value =="fermer") {
-						return "Fermer"
-								+ "<span style='color:#d00; margin-left:10px;'>("
-								+ count + " Tiquets)</span>";
-
-					}else {
+					} 
+					
+//					else if(value =="fermer") {
+//						return "Fermer"
+//								+ "<span style='color:#d00; margin-left:10px;'>("
+//								+ count + " Tiquets)</span>";
+//
+//					}
+					
+					else {
 						return "Assigné"
 						+ "<span style='color:#1cbfd0; margin-left:10px;'>("
 						+ count + " Tiquets)</span>";
@@ -683,13 +706,15 @@
 				success: function (data) {
 					
 					$("#semiTransparentDiv").hide();
-					if (data.success) {	
+					if (data.success==="true") {	
 						$('.modal').modal('hide');
 						$("body").removeClass("modal-open");
 						$("div.modal-backdrop").remove();
 						getTicketsTabulator();
 					}else {
-						alert("Erreur Serveur Contactez Votre Administrateur");
+						$("#FileExistUpdateOfTableView").show();
+	                	$("#FileExistUpdateOfTableView").removeAttr("hidden");
+	                	$("#FileExistUpdateOfTableView").text('Fichier existe déjà!');
 					}
 
 				},
@@ -721,7 +746,7 @@
 				dataType : "json",
 				success : function(data) {
 					$("#semiTransparentDiv").hide();
-					if (data.success) {
+					if (data.success==="true") {
 						
 						$('.modal').modal('hide');
 						$("body").removeClass("modal-open");
@@ -758,7 +783,9 @@
 						});
 
 					} else {
-						alert("No Ticket Available !");
+						$("#FileExistCreateTableView").show();
+	                	$("#FileExistCreateTableView").removeAttr("hidden");
+	                	$("#FileExistCreateTableView").text('Fichier existe déjà!');
 					}
 
 				},
@@ -1115,6 +1142,29 @@
 	    
 		
 		////***********************************************************************************////
+		
+		
+		$("#fileofTableView").on('change',function() {
+			var isHidden = document.getElementById("FileExistCreateTableView").hasAttribute("hidden");
+		
+	    	if (!isHidden) {
+	    		$("#FileExistCreateTableView").attr("hidden",true);
+	    		$("#FileExistCreateTableView").hide();	
+			}
+	    	
+	    
+		});
+		
+		$("#fileUpdateOfTableView").on('change',function() {
+			var isHidden = document.getElementById("FileExistUpdateOfTableView").hasAttribute("hidden");
+		
+	    	if (!isHidden) {
+	    		$("#FileExistUpdateOfTableView").attr("hidden",true);
+	    		$("#FileExistUpdateOfTableView").hide();	
+			}
+	    	
+	    
+		});
 		
 	 
 	
